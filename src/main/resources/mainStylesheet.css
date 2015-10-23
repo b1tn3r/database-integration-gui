@@ -1,0 +1,147 @@
+.menu-bar {
+  -fx-background-color: #181818;
+  -fx-text-fill: #d8d8d8;
+}
+.context-menu {
+  -fx-background-color: #181818;
+}
+.menu-bar .label {
+  -fx-font-size: 10pt;
+  -fx-font-family: "Palatino";
+  -fx-text-fill: #d8d8d8;
+  -fx-opacity: 0.9;
+}
+.table-view {
+  -fx-base: #282828;
+  -fx-control-inner-background: #282828;
+  -fx-background-color: #282828;
+  -fx-table-cell-border-color: transparent;
+  -fx-table-header-border-color: transparent;
+}
+.table-view .column-header .label {
+  -fx-font-size: 11pt;
+  -fx-font-family: "Perpetua";
+  -fx-text-fill: #d8d8d8;
+  -fx-alignment: center;
+  -fx-opacity: 1;
+}
+.table-view .column-header-background {
+  -fx-background-color: transparent;
+}
+.table-view .column-header,
+.table-view .table-view .filler {
+  -fx-size: 35;
+  -fx-border-width: 0 0 1 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent transparent derive(-fx-base, 80%) transparent;
+  -fx-border-insets: 0 10 1 0;
+}
+.table-view:focused .table-row-cell:filled:focused:selected {
+  -fx-background-color: #ab4642;
+}
+.text-field {
+  -fx-font-family: "Palatino";
+  -fx-background-color: #383838;
+  -fx-text-fill: #d8d8d8;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow(one-pass-box, black, 8, 0, 2, 0);
+}
+.button {
+  -fx-border-color: #e2e2e2;
+  -fx-border-width: 2;
+  -fx-background-radius: 0;
+  -fx-background-color: #1d1d1d;
+  -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  -fx-font-weight: bold;
+  -fx-text-fill: #d8d8d8;
+  -fx-background-insets: 0 0 0 0, 0, 1, 2;
+  -fx-effect: dropshadow(one-pass-box, black, 8, 0, 2, 0);
+}
+.button:hover {
+  -fx-background-color: #ab4642;
+}
+.button:pressed,
+.button:default:hover:pressed {
+  -fx-background-color: #ab4642;
+  -fx-text-fill: #1d1d1d;
+}
+.button:focused {
+  -fx-border-color: white, white;
+  -fx-border-width: 1, 1;
+  -fx-border-style: solid, segments(1, 1);
+  -fx-border-radius: 0, 0;
+  -fx-border-insets: 1 1 1 1, 0;
+}
+.button:disabled,
+.button:default:disabled {
+  -fx-opacity: 0.4;
+  -fx-background-color: #1d1d1d;
+  -fx-text-fill: white;
+}
+.button:default {
+  -fx-background-color: -fx-focus-color;
+  -fx-text-fill: #ffffff;
+}
+.button:default:hover {
+  -fx-background-color: derive(-fx-focus-color, 30%);
+}
+.toggle-button {
+  -fx-border-color: #e2e2e2;
+  -fx-border-width: 2;
+  -fx-background-radius: 0;
+  -fx-background-color: #1d1d1d;
+  -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  -fx-font-weight: bold;
+  -fx-text-fill: #d8d8d8;
+  -fx-background-insets: 0 0 0 0, 0, 1, 2;
+  -fx-effect: dropshadow(one-pass-box, black, 8, 0, 2, 0);
+}
+.toggle-button:hover {
+  -fx-background-color: #ab4642;
+}
+.toggle-button:pressed,
+.toggle-button:default:hover:pressed {
+  -fx-background-color: #ab4642;
+  -fx-text-fill: #1d1d1d;
+}
+.toggle-button:focused {
+  -fx-border-color: white, white;
+  -fx-border-width: 1, 1;
+  -fx-border-style: solid, segments(1, 1);
+  -fx-border-radius: 0, 0;
+  -fx-border-insets: 1 1 1 1, 0;
+}
+.toggle-button:disabled,
+.toggle-button:default:disabled {
+  -fx-opacity: 0.4;
+  -fx-background-color: #1d1d1d;
+  -fx-text-fill: white;
+}
+.toggle-button:default {
+  -fx-background-color: -fx-focus-color;
+  -fx-text-fill: #ffffff;
+}
+.toggle-button:default:hover {
+  -fx-background-color: derive(-fx-focus-color, 30%);
+}
+#hbox-bottom {
+  -fx-background-color: #ab4642;
+}
+#hbox-top {
+  -fx-background-color: #ab4642;
+}
+.label {
+  -fx-text-fill: #181818;
+  -fx-font-weight: bold;
+}
+.scroll-bar:vertical {
+  -fx-background-color: #ab4642;
+  -fx-background-insets: 0, 0 1 0 1;
+}
+.scroll-bar:focused {
+  -fx-background-color: -fx-focus-color, linear-gradient(to bottom, derive(-fx-base, -3%), derive(-fx-base, 5%) 50%, derive(-fx-base, -3%)), -fx-faint-focus-color, linear-gradient(to bottom, derive(-fx-base, -3%), derive(-fx-base, 5%) 50%, derive(-fx-base, -3%));
+  -fx-background-insets: -0.2, 1, -1.4, 2.6;
+}
+.scroll-bar:vertical:focused {
+  -fx-background-color: -fx-focus-color, linear-gradient(to right, derive(-fx-base, -3%), derive(-fx-base, 5%) 50%, derive(-fx-base, -3%)), -fx-faint-focus-color, linear-gradient(to right, derive(-fx-base, -3%), derive(-fx-base, 5%) 50%, derive(-fx-base, -3%));
+}

@@ -28,7 +28,7 @@ import java.util.Properties;
 
 public class BusinessLayer {
     private static String path;
-    private static String propertiesFile = "connection.properties";
+    private static String propertiesFile = "/connection.properties";
 
     private static User user;
     private static int userID;                 // this is used as an instance to hold the current value of the user so it can be used for inserting information into dbo.AuditHistory table
@@ -130,21 +130,25 @@ public class BusinessLayer {
     }
 
     public void switchScene(ActionEvent event, String toFXML) throws IOException {
+        String fixFXML = "/" + toFXML;                     // ensures the resources folder is property accessed with a / beforehand
+
         Node stageNode = (Node) event.getSource();                          // first the node is obtained from the specific event's node source
         Scene scene = stageNode.getScene();                                  // the scene the event was made in is gotten from the node
         Stage stage = (Stage) scene.getWindow();                                   // then the stage is gotten from the scene
 
-        Parent root = FXMLLoader.load(getClass().getResource(toFXML));         // the Parent for the form's fxml sheet is loaded
+        Parent root = FXMLLoader.load(getClass().getResource(fixFXML));         // the Parent for the form's fxml sheet is loaded
 
         Scene toScene = new Scene(root, scene.getWidth(), scene.getHeight());           // a new scene is created from the form's Parent and then its size is set from the current scene's width and height
         stage.setScene(toScene);
         stage.show();
     }
     public void switchSceneWithDiffSize(ActionEvent event, String toFXML, int width, int height) throws IOException {
+        String fixFXML = "/" + toFXML;
+
         Node stageNode = (Node) event.getSource();
         Scene scene = stageNode.getScene();
         Stage stage = (Stage) scene.getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource(toFXML));
+        Parent root = FXMLLoader.load(getClass().getResource(fixFXML));
         Scene toScene = new Scene(root, width, height);                      // this method is used to switch a scene to a size that is different from the fromScene's sizes such as switching from the main table to the login screen that is a smaller height
         stage.setScene(toScene);
         stage.show();

@@ -12,7 +12,7 @@ public class DataAccessObject {
     private static Properties props;
     public static String connectionURL;
     private static String path;
-    private static String propertiesFile = "connection.properties";
+    private static String propertiesFile = "/connection.properties";           // when connection.properties is accessed the getResource method is used to get the file from the resources dir and then the path is taken from it
 
     // Constructor will Connect to Database
     public void connect() throws ClassNotFoundException, SQLException, IOException {
@@ -21,7 +21,7 @@ public class DataAccessObject {
         }
         // ___________ Get connection properties _____________________
         this.props = new Properties();                           // a properties object is made that is used to retrieve the connection properties
-        props.load(new FileInputStream(path + propertiesFile));     // connection.properties file is read with FileInputStream and loaded to the Properties object
+        props.load(new FileInputStream(getClass().getResource(propertiesFile).getPath()));     // connection.properties file is read with FileInputStream and loaded to the Properties object
 
         String driver = props.getProperty("microsoftDriver");
         if(connectionURL == null) {

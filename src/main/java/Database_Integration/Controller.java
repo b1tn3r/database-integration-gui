@@ -37,8 +37,8 @@ public class Controller implements Initializable {
     private final String projectPath = "/Database_Integration/";
     private static String path;
 
-    public void properClose(Stage stage) {
-        stage.setOnCloseRequest(e -> {
+    public void properClose(Stage primaryStage) {
+        primaryStage.setOnCloseRequest(e -> {            // the properClose method is set here due to surprising errors
             e.consume();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Exiting");
@@ -51,7 +51,7 @@ public class Controller implements Initializable {
                     DataAccessObject dao = new DataAccessObject();
                     dao.close();                                         // in case there is still an open Connection, the DataAccessObject's close() method is called to close the Connection if it is not null
                 } catch (SQLException e1){}
-                stage.close();
+                primaryStage.close();
             }
         });
     }
@@ -177,7 +177,7 @@ public class Controller implements Initializable {
     public void toggleVisuals(ActionEvent event) {
         Node stageNode = (Node) event.getSource();               // the Scene  that the even takes place in is get
         Scene scene = stageNode.getScene();
-        String css = this.getClass().getResource(projectPath + "mainStylesheet.css").toExternalForm();          // the css stylesheet is get and stored to "css" variable
+        String css = this.getClass().getResource("/mainStylesheet.css").toExternalForm();          // the css stylesheet is get and stored to "css" variable
         if(toggleVisualsButton.isSelected()) {
             scene.getStylesheets().add(css);                          // when the toggle button is pressed, either the stylesheet is added or removed to the current scene, in which if the it is toggled on, it is added and if toggled off, it is removed
         } else {
@@ -189,8 +189,9 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize the path variable
-        String p = this.getClass().getResource(projectPath).toExternalForm();     // retrieve the current local path the application is in at the moment and add the projectPath to the end of it
-        this.path = p.substring(6, p.length());                                    // then remove the "file:/" off the front of it
+        String targetPath = this.getClass().getResource(projectPath).getPath();     // retrieve the current local path the application is in, which will point to ../target/classes/Database_Integration/, but it needs to be changed to point to the java source code
+        String localPathToProject = targetPath.substring(0, targetPath.length() - 36);                     // this takes off some directories so it is a direct path to the project in the local path it is in on the computer it is run on
+        this.path = localPathToProject + "src/main/java/Database_Integration/";             // this adds the directory of the folder that all the java code is located in
 
         // Initialize User Label with Username logged in
         BusinessLayer bl = new BusinessLayer();

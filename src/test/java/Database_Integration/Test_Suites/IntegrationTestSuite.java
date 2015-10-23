@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Categories.class)
 @Categories.IncludeCategory(IntegrationTest.class)
-@Suite.SuiteClasses(InsertFormController_IntegrationTest.class)      // does not need to be added
+@Suite.SuiteClasses(InsertFormController_IntegrationTest.class)      // does not need to be added.. only meant for Extra classes outside of IntegrationTest category
 public class IntegrationTestSuite {
 
 }
