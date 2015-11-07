@@ -1,0 +1,2 @@
+Main-Class: Database_Integration.Main
+Class-Path: src/main/resources/sqljdbc42.jar

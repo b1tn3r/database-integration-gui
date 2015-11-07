@@ -26,13 +26,13 @@ public class LoginController implements Initializable {
     public static List<User> userList;
 
 
-    public void login(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    protected void login(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         for(User user: userList) {
             if(((String) comboBox.getValue()).equals(user.getUsername())) {          // if the comboBox value is equal to one of the user's usernames being cycled through, it will then go on to check the password
                 User attemptUser = user;
 
                 String checkHash = attemptUser.getPassword();
-                String checkPassword = passwordField.getText();                    // the hashed password from the user object and the password from the password textbox are used to check against each other
+                String checkPassword = passwordField.getText();                    // the hashed password from the user object and the password from the password textbox are used to check against each other.
 
                 boolean isWhitespace = containsWhiteSpace(checkPassword);        // the password input is checked for whitespaces to ensure that the user does not try to use any type of injection to the database
                 if(isWhitespace) {
