@@ -42,7 +42,7 @@ public class DataAccessObject {
     }
 
     public void switchToAdmin() throws IOException {
-        this.connectionURL = props.getProperty("connectionURL_WinAuth");                           // switches the connection to the Window Auth to enable admin privileges for changing the password
+        this.connectionURL = props.getProperty("connectionURL_changePassword");                           // switches the connection to the changePassword url to enable the one permission for changing a password
     }
 
     public void commit(Connection connection, String commit) throws SQLException {
@@ -266,6 +266,8 @@ public class DataAccessObject {
 
         statement = conn.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
+
+        sql = null;                    // sql is made null so it can be garbage collected later
 
         return resultSet;
     }

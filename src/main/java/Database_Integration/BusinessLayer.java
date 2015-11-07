@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -56,6 +57,9 @@ public class BusinessLayer {
         if(checkHash.equals(passwordHash)) {                   // if the hash value from the password field equals the hash value from the database, the method returns true so the user is able to log in
             answer = true;
         }
+
+        checkPassword = null;
+        sql = null;                                // both sql and checkPassword are made null so their String objects can be garbage collected in the login controllers
 
         return answer;
     }

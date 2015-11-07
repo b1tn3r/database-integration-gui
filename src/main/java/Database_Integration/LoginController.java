@@ -43,6 +43,9 @@ public class LoginController implements Initializable {
                 BusinessLayer bl = new BusinessLayer();
                 boolean answer = bl.checkHashFunction(checkPassword, checkHash);        // the user object password is already hashed and is checked against the textbox's password that will be hashed before compared
 
+                checkPassword = null;
+                System.gc();                  // the checkPassword that held the user's password is set to null, and then the garbage collector is called so that it deletes the checkPassword String from memory so it cannot be retrieved by an attacker
+
                 if(answer == true) {                                                    // if the hashed passwords are equal then "answer" is true
                     bl.changeUserG(user, checkPassword);                               // if password checks out, the user login to sql server is changed to the user defined in the comboBox and the scene switches back to the table window
                     bl.switchSceneWithDiffSize(event, "Interface.fxml", 700, 500);

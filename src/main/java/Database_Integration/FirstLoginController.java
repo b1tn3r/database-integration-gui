@@ -37,6 +37,9 @@ public class FirstLoginController implements Initializable {
                 BusinessLayer bl = new BusinessLayer();
                 boolean answer = bl.checkHashFunction(checkPassword, checkHash);
 
+                checkPassword = null;
+                System.gc();                  // the checkPassword that held the user's password is set to null, and then the garbage collector is called so that it deletes the checkPassword String from memory so it cannot be retrieved by an attacker
+
                 if(answer == true) {
                     bl.changeUserG(user, checkPassword);
                     bl.switchSceneWithDiffSize(event, "Interface.fxml", 700, 500);

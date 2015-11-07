@@ -53,6 +53,11 @@ public class ChangePasswordController implements Initializable {
 
                     bl.switchToFromAdmin("user", user, newPassword1);              // after the passwords are updated, the connectionURL is switched to the username and new password they have entered
 
+                    checkPassword = null;
+                    newPassword1 = null;
+                    newPassword2 = null;
+                    System.gc();                          // all the password references are made null so they can all be garbage collected
+
                     bl.switchSceneWithDiffSize(event, "Interface.fxml", 700, 500);            // the scene is then switched to the main table scene after auto logging in the user
                 }
             } else {
