@@ -47,11 +47,7 @@ public class ChangePasswordController implements Initializable {
                 boolean ask = askSave();         // the user is asked if they want to save before the save occurs so the program does not stop for the user while elevated privileges are activated
                 if(ask) {
 
-                    bl.switchToFromAdmin("admin", user, newPassword1);              // the window is only given admin privileges by switching to the integratedSecurity=true connectionURL after all input filters have been passed and the program is ready to change the server login password.. by not allowing the window admin privileges until the password is ready to be changed enables more security so the user does not have a chance to crash the program in any way while admin privileges are enables which would allow the user to keep elevated privileges if they are able to keep the program active after they crash it
-
-                    bl.updatePassword(newPassword1, user);                   // this sends the new password in to be both updated in the Users table and for their server login password
-
-                    bl.switchToFromAdmin("user", user, newPassword1);              // after the passwords are updated, the connectionURL is switched to the username and new password they have entered
+                    bl.updatePassword(newPassword1, checkPassword, user);                   // this sends the new password in to be both updated in the Users table and for their server login password.. It uses the user's current login to change their own password
 
                     checkPassword = null;
                     newPassword1 = null;

@@ -15,7 +15,7 @@ public class DataAccessObject {
     private static String propertiesFile = "/connection.properties";           // when connection.properties is accessed the getResource method is used to get the file from the resources dir and then the path is taken from it
 
     // Constructor will Connect to Database
-    public void connect() throws ClassNotFoundException, SQLException, IOException {
+    public void connectFirst() throws ClassNotFoundException, SQLException, IOException {
         if(this.conn != null) {
             this.conn.close();        // closes any old connection when connect() is called
         }
@@ -34,6 +34,15 @@ public class DataAccessObject {
         conn.setAutoCommit(false);
     }
 
+    public void connect() throws ClassNotFoundException, SQLException, IOException {
+        if(this.conn != null) {
+            this.conn.close();        // closes any old connection when connect() is called
+        }
+
+        conn = DriverManager.getConnection(connectionURL);
+        conn.setAutoCommit(false);
+    }
+
     public User changeProperty(User user, String password) throws ClassNotFoundException, SQLException, IOException {         // this method changes the connectionURL for all connection made to the database to change to a specified user in the Login screen
 
         this.connectionURL = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;      // the connectionURL is stored as a static instance of the class so it will be used by all connections after this change is made.. it changes the connection username and password to that of the user wanting to log in
@@ -41,8 +50,9 @@ public class DataAccessObject {
         return user;                       // the userID of the user is returned to be used in the business layer so the records of the user are inserted into dbo.AuditHistory
     }
 
-    public void switchToAdmin() throws IOException {
-        this.connectionURL = props.getProperty("connectionURL_changePassword");                           // switches the connection to the changePassword url to enable the one permission for changing a password
+    public void garbageCollectProperties() {
+        this.connectionURL = null;                // makes the connectionURL that is holding the current Username and Password null, so then the non-referenced String can be garbage collected
+        System.gc();
     }
 
     public void commit(Connection connection, String commit) throws SQLException {
@@ -253,7 +263,7 @@ public class DataAccessObject {
     public ResultSet getLoginUsers(String sql) throws SQLException, IOException, ClassNotFoundException {
         PreparedStatement prepStatement = null;
 
-        connect();
+        connectFirst();
         prepStatement = conn.prepareStatement(sql);
 
         ResultSet resultSet = prepStatement.executeQuery();
@@ -279,6 +289,8 @@ public class DataAccessObject {
         statement.executeUpdate(sql);
 
         conn.commit();
+
+        sql = null;
         if(statement != null) {
             statement.close();
         }
