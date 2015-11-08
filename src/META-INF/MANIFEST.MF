@@ -3,4 +3,10 @@ Class-Path: sqljdbc42.jar
 Created-By: Apache Maven ${maven.version}
 Built-By: ${user.name}
 Build-Jdk: ${java.version}
-
+Name: Database_Integration/
+Specification-Title: "NWTraders Database Interface"
+Specification-Version: "1.0"
+Specification-Vendor: "Michael Bitner, Freelance Programmer"
+Implementation-Title: "database_integration"
+Implementation-Version: "build1"
+Implementation-Vendor: "Michael Bitner, Freelance Programmer"

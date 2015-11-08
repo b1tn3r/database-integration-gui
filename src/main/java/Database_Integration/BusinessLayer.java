@@ -110,25 +110,26 @@ public class BusinessLayer {
         if(result.get() == ButtonType.OK) {
             BusinessLayer bl = new BusinessLayer();
             bl.deleteFolderFiles(new File(path + "temp"));        // when close is called from the MenuItem, it deletes all the files in the "temp" folder and closes the Connection if it is not null already before closing the window
+            bl.garbageCollectProperties();                      // the connectionURL is garbage collected every time that the application closes so that the Password cannoot be obtained in memory
             try {
                 DataAccessObject dao = new DataAccessObject();
                 dao.close();
-            } catch (SQLException e1) {}
+            } catch (SQLException e1) {
+            }
             Platform.exit();
         }
     }
     public void deleteFolderFiles(File folder) {
-        garbageCollectProperties();                  // the connectionURL is garbage collected every time that the application closes so that the Password cannoot be obtained in memory
-
         File[] files = folder.listFiles();          // listFiles() method used to return an array of files within "folder"
-        for(File f: files) {               // the files are cycled through in the folder if there are any in it
-            if(f.isDirectory()) {
-                deleteFolderFiles(f);      // if one of the files in the folder is a folder, it is sent to a recursion step to traverse the entire folder to delete files and not delete any folders
-            } else {
-                f.delete();            // if the file being cycled through is not a folder, it is deleted
+        if(files != null) {
+            for (File f : files) {               // the files are cycled through in the folder if there are any in it
+                if (f.isDirectory()) {
+                    deleteFolderFiles(f);      // if one of the files in the folder is a folder, it is sent to a recursion step to traverse the entire folder to delete files and not delete any folders
+                } else {
+                    f.delete();            // if the file being cycled through is not a folder, it is deleted
+                }
             }
         }
-
     }
     public void garbageCollectProperties() {
         DataAccessObject dao = new DataAccessObject();

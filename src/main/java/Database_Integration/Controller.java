@@ -1,6 +1,7 @@
 package Database_Integration;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -38,7 +39,7 @@ public class Controller implements Initializable {
     private static String path;
 
     public void properClose(Stage primaryStage) {
-        primaryStage.setOnCloseRequest(e -> {            // the properClose method is set here due to surprising errors
+        primaryStage.setOnCloseRequest(e -> {
             e.consume();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Exiting");
@@ -47,10 +48,12 @@ public class Controller implements Initializable {
             if(result.get() == ButtonType.OK) {
                 BusinessLayer bl = new BusinessLayer();
                 bl.deleteFolderFiles(new File(path + "temp"));           // on a close of the window from the 'X', the deleteFolderFiles method is called to delete all the files in the temp folder that is used to temporarily save all the files from the database
+                bl.garbageCollectProperties();                        // the connectionURL is garbage collected every time that the application closes so that the Password cannoot be obtained in memory
                 try {
                     DataAccessObject dao = new DataAccessObject();
                     dao.close();                                         // in case there is still an open Connection, the DataAccessObject's close() method is called to close the Connection if it is not null
-                } catch (SQLException e1){}
+                } catch (SQLException e1){
+                }
                 primaryStage.close();
             }
         });
