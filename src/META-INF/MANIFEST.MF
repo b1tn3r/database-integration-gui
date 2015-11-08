@@ -1,2 +1,6 @@
 Main-Class: Database_Integration.Main
-Class-Path: src/main/resources/sqljdbc42.jar
+Class-Path: sqljdbc42.jar
+Created-By: Apache Maven ${maven.version}
+Built-By: ${user.name}
+Build-Jdk: ${java.version}
+
