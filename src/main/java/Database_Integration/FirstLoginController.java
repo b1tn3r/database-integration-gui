@@ -2,6 +2,7 @@ package Database_Integration;
 // Opposed to Login.fxml and LoginController, this will be the login screen that the application opens on and will not have a cancel button.. only a Login button
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -15,12 +16,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class FirstLoginController implements Initializable {
-    public Button loginButton;
-    public ComboBox comboBox;
-    public TextField passwordField;
-    public List<User> userList;
+    @FXML private Button loginButton;
+    @FXML private ComboBox comboBox;
+    @FXML private TextField passwordField;
+    @FXML private List<User> userList;
 
-    public void login(ActionEvent event) throws SQLException, IOException, ClassNotFoundException, IllegalArgumentException {
+    @FXML
+    private void login(ActionEvent event) throws SQLException, IOException, ClassNotFoundException, IllegalArgumentException {
         for(User user: userList) {
             if(((String) comboBox.getValue()).equals(user.getUsername())) {
                 User attemptUser = user;
@@ -59,7 +61,7 @@ public class FirstLoginController implements Initializable {
         }
     }
 
-    public boolean containsWhiteSpace(String password) {
+    private boolean containsWhiteSpace(String password) {
         if(password != null){
             for(int i = 0; i < password.length(); i++){
                 if(Character.isWhitespace(password.charAt(i))){
@@ -69,8 +71,8 @@ public class FirstLoginController implements Initializable {
         }
         return false;
     }
-
-    public void alertBox(String title, String content) {
+    
+    private void alertBox(String title, String content) {
         Alert alertBox = new Alert(Alert.AlertType.ERROR);
         alertBox.setTitle(title);
         alertBox.setContentText(content);

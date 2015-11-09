@@ -1,6 +1,7 @@
 package Database_Integration;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -19,14 +20,14 @@ import java.util.ResourceBundle;
 // This is the Login Window for only after the user has logged in once, in which this one has a cancel button to go back to the main home screen where the other one does not because the user needs to log in on that one or exit
 
 public class LoginController implements Initializable {
-    public Button loginButton;
-    public Button cancelButton;
-    public ComboBox comboBox;
-    public TextField passwordField;
-    public static List<User> userList;
+    @FXML private Button loginButton;
+    @FXML private Button cancelButton;
+    @FXML private ComboBox comboBox;
+    @FXML private TextField passwordField;
+    @FXML private static List<User> userList;
 
-
-    protected void login(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    @FXML
+    private void login(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         for(User user: userList) {
             if(((String) comboBox.getValue()).equals(user.getUsername())) {          // if the comboBox value is equal to one of the user's usernames being cycled through, it will then go on to check the password
                 User attemptUser = user;
@@ -64,12 +65,13 @@ public class LoginController implements Initializable {
             }
         }
     }
-    public void cancel(ActionEvent event) throws IOException {
+    @FXML
+    private void cancel(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.switchSceneWithDiffSize(event,"Interface.fxml", 700, 500);
     }
 
-    public boolean containsWhiteSpace(String password) {
+    private boolean containsWhiteSpace(String password) {
         if(password != null){
             for(int i = 0; i < password.length(); i++){
                 if(Character.isWhitespace(password.charAt(i))){
@@ -80,7 +82,7 @@ public class LoginController implements Initializable {
         return false;
     }
 
-    public void alertBox(String title, String content) {
+    private void alertBox(String title, String content) {
         Alert alertBox = new Alert(Alert.AlertType.ERROR);
         alertBox.setTitle(title);
         alertBox.setContentText(content);
