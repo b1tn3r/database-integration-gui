@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class HelpWindow {
 
-    public HelpWindow() throws IOException {
+    protected HelpWindow() throws IOException {
 
         Stage stage = new Stage();
         stage.setX(1150);

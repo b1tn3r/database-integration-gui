@@ -4,6 +4,8 @@ package Database_Integration;
 // This class holds the instance variables for Employee object along with initiating them in the constructor
 // and all the getters and setters for them as well
 
+import javafx.fxml.FXML;
+
 import java.io.File;
 
 public class Employee {
@@ -16,7 +18,7 @@ public class Employee {
     private String HomePhone;
     private File Photo;
 
-    public Employee(int EmployeeID, String LastName, String FirstName, String Title, String Address,
+    protected Employee(int EmployeeID, String LastName, String FirstName, String Title, String Address,
                     String City, String HomePhone, File Photo) {
         super();
         this.EmployeeID = EmployeeID;
@@ -30,7 +32,7 @@ public class Employee {
     }
 
     // This is the constructor for the method that does not convert Photo as a file
-    public Employee(int EmployeeID, String LastName, String FirstName, String Title, String Address,
+    protected Employee(int EmployeeID, String LastName, String FirstName, String Title, String Address,
                     String City, String HomePhone) {
         super();
         this.EmployeeID = EmployeeID;
@@ -41,14 +43,14 @@ public class Employee {
         this.City = City;
         this.HomePhone = HomePhone;
     }
-    public Employee(int EmployeeID, String LastName, String FirstName, String Title) {           // this is another method for when only these parameters are entered by the user
+    protected Employee(int EmployeeID, String LastName, String FirstName, String Title) {           // this is another method for when only these parameters are entered by the user
         super();
         this.EmployeeID = EmployeeID;
         this.LastName = LastName;
         this.FirstName = FirstName;
         this.Title = Title;
     }
-    public Employee(int EmployeeID, String LastName, String FirstName) {
+    protected Employee(int EmployeeID, String LastName, String FirstName) {
         super();
         this.EmployeeID = EmployeeID;
         this.LastName = LastName;

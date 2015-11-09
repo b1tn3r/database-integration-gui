@@ -2,14 +2,14 @@ package Database_Integration;
 // This is a placeholder object for all the information out of the dbo.Users table
 
 public class User {
-    public int UserID;
-    public String Username;
-    public String Password;
-    public String LastName;
-    public String FirstName;
+    private int UserID;
+    private String Username;
+    private String Password;
+    private String LastName;
+    private String FirstName;
 
 
-    public User(int userID, String username, String password, String lastName, String firstName) {
+    protected User(int userID, String username, String password, String lastName, String firstName) {
         UserID = userID;
         Username = username;
         Password = password;

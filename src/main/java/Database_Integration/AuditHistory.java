@@ -12,7 +12,7 @@ public class AuditHistory {
     private String UserName;
     private String Password;
 
-    public AuditHistory(int AuditID, int UserID, int EmployeeID, String Action, String ActionDateTime) {
+    protected AuditHistory(int AuditID, int UserID, int EmployeeID, String Action, String ActionDateTime) {
         this.AuditID = AuditID;
         this.UserID = UserID;
         this.EmployeeID = EmployeeID;
@@ -20,14 +20,14 @@ public class AuditHistory {
         this.ActionDateTime = ActionDateTime;
     }
 
-    public AuditHistory(int UserID, int EmployeeID, String Action, String ActionDateTime) {
+    protected AuditHistory(int UserID, int EmployeeID, String Action, String ActionDateTime) {
         this.UserID = UserID;
         this.EmployeeID = EmployeeID;
         this.Action = Action;
         this.ActionDateTime = ActionDateTime;
     }
 
-    public AuditHistory(int AuditID, int UserID, int EmployeeID, String Action, String ActionDateTime, String UserName, String Password) {
+    protected AuditHistory(int AuditID, int UserID, int EmployeeID, String Action, String ActionDateTime, String UserName, String Password) {
         this.AuditID = AuditID;
         this.UserID = UserID;
         this.EmployeeID = EmployeeID;
@@ -36,7 +36,7 @@ public class AuditHistory {
         this.UserName = UserName;
         this.Password = Password;
     }
-    public AuditHistory(int AuditID, int EmployeeID, String Action, String ActionDateTime, String UserName, String Password) {
+    protected AuditHistory(int AuditID, int EmployeeID, String Action, String ActionDateTime, String UserName, String Password) {
         this.AuditID = AuditID;
         this.EmployeeID = EmployeeID;
         this.Action = Action;
@@ -46,7 +46,7 @@ public class AuditHistory {
     }
 
 
-    public AuditHistory(String Action, String ActionDateTime, String UserName, String Password) {
+    protected AuditHistory(String Action, String ActionDateTime, String UserName, String Password) {
         this.Action = Action;
         this.ActionDateTime = ActionDateTime;
         this.UserName = UserName;

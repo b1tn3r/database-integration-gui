@@ -10,22 +10,28 @@ import java.io.*;
 public class DataAccessObject {
     private static Connection conn;
     private static Properties props;
-    public static String connectionURL;
+    private static String connectionURL;
     private static String path;
     private static String propertiesFile = "/connection.properties";           // when connection.properties is accessed the getResource method is used to get the file from the resources dir and then the path is taken from it
 
     // Constructor will Connect to Database
-    public void connectFirst() throws ClassNotFoundException, SQLException, IOException {
+    private void connectFirst() throws ClassNotFoundException, SQLException, IOException {
         if(this.conn != null) {
             this.conn.close();        // closes any old connection when connect() is called
         }
+        /*
         // ___________ Get connection properties _____________________
-        this.props = new Properties();                           // a properties object is made that is used to retrieve the connection properties
+       this.props = new Properties();                           // a properties object is made that is used to retrieve the connection properties
         props.load(new FileInputStream(getClass().getResource(propertiesFile).getPath()));     // connection.properties file is read with FileInputStream and loaded to the Properties object
 
         String driver = props.getProperty("microsoftDriver");
         if(connectionURL == null) {
             this.connectionURL = props.getProperty("connectionURL_WinAuth");      // when the program starts at the login screen, the WindowsAuthentication connectionURL is used so the Users data can be retrieved from the database for login to another user and connection
+        }
+        */
+        String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";          // the connection.properties file would not work in the Jar file, so these were just uploaded to the DataAccess Object
+        if(connectionURL == null) {
+            connectionURL = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=UsernameAccess;password=PublicPassword";
         }
 
         // ____________ Connect to Database ___________________________
@@ -34,7 +40,7 @@ public class DataAccessObject {
         conn.setAutoCommit(false);
     }
 
-    public void connect() throws ClassNotFoundException, SQLException, IOException {
+    protected void connect() throws ClassNotFoundException, SQLException, IOException {
         if(this.conn != null) {
             this.conn.close();        // closes any old connection when connect() is called
         }
@@ -43,19 +49,19 @@ public class DataAccessObject {
         conn.setAutoCommit(false);
     }
 
-    public User changeProperty(User user, String password) throws ClassNotFoundException, SQLException, IOException {         // this method changes the connectionURL for all connection made to the database to change to a specified user in the Login screen
+    protected User changeProperty(User user, String password) throws ClassNotFoundException, SQLException, IOException {         // this method changes the connectionURL for all connection made to the database to change to a specified user in the Login screen
 
         this.connectionURL = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;      // the connectionURL is stored as a static instance of the class so it will be used by all connections after this change is made.. it changes the connection username and password to that of the user wanting to log in
 
         return user;                       // the userID of the user is returned to be used in the business layer so the records of the user are inserted into dbo.AuditHistory
     }
 
-    public void garbageCollectProperties() {
+    protected void garbageCollectProperties() {
         this.connectionURL = null;                // makes the connectionURL that is holding the current Username and Password null, so then the non-referenced String can be garbage collected
         System.gc();
     }
 
-    public void commit(Connection connection, String commit) throws SQLException {
+    protected void commit(Connection connection, String commit) throws SQLException {
         if(commit.equals("yes")) {
             connection.commit();
         } else {
@@ -64,7 +70,7 @@ public class DataAccessObject {
     }
 
     // This will be the method to add an employee to the database after all the fields in the form have been filled out
-    public String addEmployee(Employee employee, String sql, String queryEmployeeID, String auditSql, int userID) throws SQLException, ClassNotFoundException, IOException {
+    protected String addEmployee(Employee employee, String sql, String queryEmployeeID, String auditSql, int userID) throws SQLException, ClassNotFoundException, IOException {
         Statement queryStatement = null;
         PreparedStatement prepStatement = null;
 
@@ -124,7 +130,7 @@ public class DataAccessObject {
         }
     }
 
-    public String updateEmployee(String sql, String newValue, int id, int column, String auditSql, int userID) throws ClassNotFoundException, SQLException, IOException {
+    protected String updateEmployee(String sql, String newValue, int id, int column, String auditSql, int userID) throws ClassNotFoundException, SQLException, IOException {
         PreparedStatement prepStatement = null;
 
         try {
@@ -161,7 +167,7 @@ public class DataAccessObject {
     }
 
     // A method to retrieve all Rows from Employees table that returns a List<Employee>
-    public ResultSet getAllEmployees(String sql) throws ClassNotFoundException, SQLException, IOException {
+    protected ResultSet getAllEmployees(String sql) throws ClassNotFoundException, SQLException, IOException {
         connect();
         List<Employee> list = new ArrayList<>();       // a list with type Employee object is created
         Statement statement = null;
@@ -175,7 +181,7 @@ public class DataAccessObject {
     }
 
     // A method to search for any Employee row data that matches a lastName String entered by the user.. returns a list with type Employee to be used to output to the interface
-    public ResultSet searchEmployees(String search, String sql) throws ClassNotFoundException, SQLException, IOException {
+    protected ResultSet searchEmployees(String search, String sql) throws ClassNotFoundException, SQLException, IOException {
         connect();
         List<Employee> list = new ArrayList<>();
         PreparedStatement prepStatement = null;
@@ -191,7 +197,7 @@ public class DataAccessObject {
         return resultSet;
     }
 
-    public Connection deleteFromDatabase(String sql, int employeeID) throws SQLException, ClassNotFoundException, IOException {
+    protected Connection deleteFromDatabase(String sql, int employeeID) throws SQLException, ClassNotFoundException, IOException {
         PreparedStatement prepStatement = null;
 
         prepStatement = conn.prepareStatement(sql);
@@ -209,7 +215,7 @@ public class DataAccessObject {
         return conn;
     }
 
-    public ResultSet getAuditHistory(String sql, int employeeID) throws SQLException, ClassNotFoundException, IOException {
+    protected ResultSet getAuditHistory(String sql, int employeeID) throws SQLException, ClassNotFoundException, IOException {
         PreparedStatement prepStatement = null;
         ResultSet resultSet = null;
 
@@ -223,7 +229,7 @@ public class DataAccessObject {
         return resultSet;
     }
 
-    public void updateAuditHistory(String sql, String newValue, int auditID) throws SQLException, IOException, ClassNotFoundException {
+    protected void updateAuditHistory(String sql, String newValue, int auditID) throws SQLException, IOException, ClassNotFoundException {
         PreparedStatement prepStatement = null;
 
         try {
@@ -242,7 +248,7 @@ public class DataAccessObject {
         }
     }
 
-    public String deleteAuditHistory(String sql, int auditID) throws SQLException, IOException, ClassNotFoundException {
+    protected String deleteAuditHistory(String sql, int auditID) throws SQLException, IOException, ClassNotFoundException {
         PreparedStatement prepStatement = null;
 
         connect();
@@ -260,7 +266,7 @@ public class DataAccessObject {
         return answer;
     }
 
-    public ResultSet getLoginUsers(String sql) throws SQLException, IOException, ClassNotFoundException {
+    protected ResultSet getLoginUsers(String sql) throws SQLException, IOException, ClassNotFoundException {
         PreparedStatement prepStatement = null;
 
         connectFirst();
@@ -271,7 +277,7 @@ public class DataAccessObject {
         return resultSet;
     }
 
-    public ResultSet getHash(String sql) throws SQLException, IOException, ClassNotFoundException {
+    protected ResultSet getHash(String sql) throws SQLException, IOException, ClassNotFoundException {
         Statement statement = null;
 
         statement = conn.createStatement();
@@ -282,7 +288,7 @@ public class DataAccessObject {
         return resultSet;
     }
 
-    public void updatePassword(String sql) throws SQLException, IOException, ClassNotFoundException {
+    protected void updatePassword(String sql) throws SQLException, IOException, ClassNotFoundException {
         Statement statement = null;
 
         statement = conn.createStatement();
@@ -318,17 +324,13 @@ public class DataAccessObject {
     private static void close(Statement statement) throws SQLException {
         close(null, statement, null);
     }
-    public void close() throws SQLException {
+    protected void close() throws SQLException {
         if(conn != null) {
             conn.close();
         }
     }
 
-    public void setPathVariable(String path) {
+    protected void setPathVariable(String path) {
         this.path = path;                         // sets path variable for the DAO so it can be used anywhere needed in dao
-    }
-
-    // This main method is to test the DataAccessObject's functionality
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException{
     }
 }

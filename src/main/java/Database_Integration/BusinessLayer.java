@@ -34,13 +34,13 @@ public class BusinessLayer {
     private static User user;
     private static int userID;                 // this is used as an instance to hold the current value of the user so it can be used for inserting information into dbo.AuditHistory table
 
-    public void changeUserG(User user, String password) throws IOException, SQLException, ClassNotFoundException {
+    protected void changeUserG(User user, String password) throws IOException, SQLException, ClassNotFoundException {
         DataAccessObject dao = new DataAccessObject();
         this.user = dao.changeProperty(user, password);                   // the user is stored as an instance to the class so the user's getUsername() can be called to place the username into a Label in the UI
         this.userID = user.getUserID();                                 // the user's UserID is saved as an instance so the userID can be retrieved to be used in inserting AuditHistory records with the userID inserted to show what user inserted itk
     }
 
-    public boolean checkHashFunction(String checkPassword, String checkHash) throws SQLException, IOException, ClassNotFoundException {
+    protected boolean checkHashFunction(String checkPassword, String checkHash) throws SQLException, IOException, ClassNotFoundException {
 
         String sql = "SELECT HASHBYTES('SHA2_512', '" + checkPassword + "')";          // sql statement that gets the hash value that will be get for the password value from the password text field
         DataAccessObject dao = new DataAccessObject();
@@ -64,7 +64,7 @@ public class BusinessLayer {
         return answer;
     }
 
-    public void updatePassword(String newPassword, String oldPassword, User user) throws SQLException, IOException, ClassNotFoundException {
+    protected void updatePassword(String newPassword, String oldPassword, User user) throws SQLException, IOException, ClassNotFoundException {
         DataAccessObject dao = new DataAccessObject();
 
         String hashSQL = "SELECT HASHBYTES('SHA2_512', '" + newPassword + "')";           // first the hash value is returned for the new password
@@ -102,7 +102,7 @@ public class BusinessLayer {
         dao.close();
     }
 
-    public void closeFromMenuG() {
+    protected void closeFromMenuG() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exiting");
         alert.setContentText("Are you sure you want to exit?");
@@ -119,7 +119,7 @@ public class BusinessLayer {
             Platform.exit();
         }
     }
-    public void deleteFolderFiles(File folder) {
+    protected void deleteFolderFiles(File folder) {
         File[] files = folder.listFiles();          // listFiles() method used to return an array of files within "folder"
         if(files != null) {
             for (File f : files) {               // the files are cycled through in the folder if there are any in it
@@ -131,12 +131,12 @@ public class BusinessLayer {
             }
         }
     }
-    public void garbageCollectProperties() {
+    protected void garbageCollectProperties() {
         DataAccessObject dao = new DataAccessObject();
         dao.garbageCollectProperties();
     }
 
-    public void switchScene(ActionEvent event, String toFXML) throws IOException {
+    protected void switchScene(ActionEvent event, String toFXML) throws IOException {
         String fixFXML = "/" + toFXML;                     // ensures the resources folder is property accessed with a / beforehand
 
         Node stageNode = (Node) event.getSource();                          // first the node is obtained from the specific event's node source
@@ -149,7 +149,7 @@ public class BusinessLayer {
         stage.setScene(toScene);
         stage.show();
     }
-    public void switchSceneWithDiffSize(ActionEvent event, String toFXML, int width, int height) throws IOException {
+    protected void switchSceneWithDiffSize(ActionEvent event, String toFXML, int width, int height) throws IOException {
         String fixFXML = "/" + toFXML;
 
         Node stageNode = (Node) event.getSource();
@@ -161,14 +161,14 @@ public class BusinessLayer {
         stage.show();
     }
 
-    public void alertBox(String error) {
+    protected void alertBox(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(error);
         alert.showAndWait();
     }
 
-    public String saveG(Connection conn, Employee employee) throws SQLException, IOException, ClassNotFoundException {             // used to save changes for adding an employee
+    protected String saveG(Connection conn, Employee employee) throws SQLException, IOException, ClassNotFoundException {             // used to save changes for adding an employee
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Save Changes");
         alert.setContentText("Are you sure you want to save these changes?\n\nFirst Name: " + employee.getFirstName() + "\nLast Name: " + employee.getLastName() + "\nPosition: " + employee.getTitle() +
@@ -185,7 +185,7 @@ public class BusinessLayer {
 
         return answer;
     }
-    public String saveUpdateG(Connection conn, int column, String newValue) throws SQLException {
+    protected String saveUpdateG(Connection conn, int column, String newValue) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Save Changes");
         String value = null;
@@ -217,7 +217,7 @@ public class BusinessLayer {
 
         return answer;
     }
-    public String saveDeletionG(Connection conn, int size) throws SQLException {             // commit or rollback dialog used for when an Employee is deleted from the database
+    protected String saveDeletionG(Connection conn, int size) throws SQLException {             // commit or rollback dialog used for when an Employee is deleted from the database
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Save Changes");
         alert.setContentText("Do you want to commit to deleting these records?\n\nTotal Rows Deleted: " + size);         // number of rows deleted will be shown in the alert box
@@ -233,15 +233,15 @@ public class BusinessLayer {
 
         return answer;
     }
-    public void aboutG() throws IOException {
+    protected void aboutG() throws IOException {
         HelpWindow helpWindow = new HelpWindow();
     }
 
-    public User getUserForLabel() {
+    protected User getUserForLabel() {
         return user;
     }
 
-    public List<Employee> findEmployees(String searchText, int answer) throws SQLException, IOException, ClassNotFoundException {
+    protected List<Employee> findEmployees(String searchText, int answer) throws SQLException, IOException, ClassNotFoundException {
         BusinessLayer bl = new BusinessLayer();
 
         List<Employee> list = null;
@@ -256,7 +256,7 @@ public class BusinessLayer {
         return list;         // the list is returned of either all the employees without the photo column or a specific search of employees with the photo column, in which answer will still be used to tell the table what columns to display
     }
 
-    public List<Employee> searchEmployeesG(String searchText) throws SQLException, IOException, ClassNotFoundException {
+    private List<Employee> searchEmployeesG(String searchText) throws SQLException, IOException, ClassNotFoundException {
         List<Employee> list = new ArrayList<>();
 
         String search = "%" + searchText + "%";     // this will wrap lastName in placeholders %last% to show there could be more or after the string inputted
@@ -283,7 +283,7 @@ public class BusinessLayer {
         return list;
     }
 
-    public List<Employee> getAllEmployeesG() throws SQLException, IOException, ClassNotFoundException {
+    private List<Employee> getAllEmployeesG() throws SQLException, IOException, ClassNotFoundException {
         List<Employee> list = new ArrayList<>();       // a list with type Employee object is created
 
         String sql = "SELECT * FROM HumanResources.Employees";
@@ -350,7 +350,7 @@ public class BusinessLayer {
         return employee;
     }
 
-    public void displayTable(List<Employee> list, int answer, TableView table) throws SQLException, ClassNotFoundException, IOException {
+    protected void displayTable(List<Employee> list, int answer, TableView table) throws SQLException, ClassNotFoundException, IOException {
 
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);           // sets the table so multiple rows can be selected
         table.setEditable(true);
@@ -376,6 +376,7 @@ public class BusinessLayer {
                     updateEmployeeG(column, newValue, employee);                     // all these are placed into the updateEmployee method that manipulates the data for the DataAccessLayer
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alertBox("You do not have proper permissions to update the Employees table.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -396,6 +397,7 @@ public class BusinessLayer {
                     updateEmployeeG(cellEvent.getTablePosition().getColumn(), cellEvent.getNewValue(), cellEvent.getRowValue());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alertBox("You do not have proper permissions to update the Employees table.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -416,6 +418,7 @@ public class BusinessLayer {
                     updateEmployeeG(cellEvent.getTablePosition().getColumn(), cellEvent.getNewValue(), cellEvent.getRowValue());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alertBox("You do not have proper permissions to update the Employees table.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -436,6 +439,7 @@ public class BusinessLayer {
                     updateEmployeeG(cellEvent.getTablePosition().getColumn(), cellEvent.getNewValue(), cellEvent.getRowValue());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alertBox("You do not have proper permissions to update the Employees table.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -456,6 +460,7 @@ public class BusinessLayer {
                     updateEmployeeG(cellEvent.getTablePosition().getColumn(), cellEvent.getNewValue(), cellEvent.getRowValue());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alertBox("You do not have proper permissions to update the Employees table.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -476,6 +481,7 @@ public class BusinessLayer {
                     updateEmployeeG(cellEvent.getTablePosition().getColumn(), cellEvent.getNewValue(), cellEvent.getRowValue());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    alertBox("You do not have proper permissions to update the Employees table.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -529,6 +535,7 @@ public class BusinessLayer {
                                 updateEmployeeG(column, path, employee);
                             } catch (SQLException e) {
                                 e.printStackTrace();
+                                alertBox("You do not have proper permissions to update the Employees table.");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (ClassNotFoundException e) {
@@ -557,7 +564,7 @@ public class BusinessLayer {
         }
     }
 
-    public String updateEmployeeG(int column, String newValue, Employee employee) throws SQLException, IOException, ClassNotFoundException {
+    private String updateEmployeeG(int column, String newValue, Employee employee) throws SQLException, IOException, ClassNotFoundException {
         String sql = null;
         if(column == 1) {
             sql = "UPDATE HumanResources.Employees " +          // depending on what column was changed, a different sql statement will be used so only one column needs to be updated in the database
@@ -600,7 +607,7 @@ public class BusinessLayer {
         return answer;                                                    // the answer from the commit alert box is returned back to the cell so the table does not update by itself if the answer is "no"
     }
 
-    public void addEmployeeG(Employee employee, ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
+    protected void addEmployeeG(Employee employee, ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         String sql = "INSERT INTO HumanResources.Employees " +
                      "(LastName, FirstName, Title, Address, City, HomePhone, Photo) " +
                      "VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -621,7 +628,7 @@ public class BusinessLayer {
         }
     }
 
-    public void deleteEmployeeG(ObservableList<Employee> selectedEmployees, TableView table) throws SQLException, IOException, ClassNotFoundException {
+    protected void deleteEmployeeG(ObservableList<Employee> selectedEmployees, TableView table) throws SQLException, IOException, ClassNotFoundException {
         List<Employee> list = new ArrayList<>(selectedEmployees);
 
         String sql = "DELETE FROM dbo.AuditHistory " +
@@ -652,7 +659,7 @@ public class BusinessLayer {
         dao.close();
     }
 
-    public void createAuditTable(Employee employee) throws SQLException, IOException, ClassNotFoundException {
+    protected void createAuditTable(Employee employee) throws SQLException, IOException, ClassNotFoundException {
         String sql = "OPEN SYMMETRIC KEY UsersNameKey DECRYPTION BY CERTIFICATE KeyProtectionCertificate; " +
                      "SELECT Username, HASHBYTES('SHA2_512', CAST(DecryptByKey(Password) as varchar(50))), " +
                             "CAST(DecryptByKey(LastName) as varchar(50)), " +
@@ -680,7 +687,7 @@ public class BusinessLayer {
         auditHistoryTable.addTableData(auditList);
     }
 
-    public AuditHistory convertRowToAuditHistory(ResultSet resultSet) throws SQLException {         // converts the ResultSet from getting the AuditHistory data to an AuditHistory object so it can be placed in a table
+    private AuditHistory convertRowToAuditHistory(ResultSet resultSet) throws SQLException {         // converts the ResultSet from getting the AuditHistory data to an AuditHistory object so it can be placed in a table
         String password = resultSet.getString(2);
         String userName = resultSet.getString(3) + " " + resultSet.getString(4);
         int auditID = resultSet.getInt(5);
@@ -694,7 +701,7 @@ public class BusinessLayer {
         return auditHistory;
     }
 
-    public void updateAuditG(int column, String newValue, AuditHistory auditHistory) throws SQLException, ClassNotFoundException, IOException {
+    protected void updateAuditG(int column, String newValue, AuditHistory auditHistory) throws SQLException, ClassNotFoundException, IOException {
 
         int auditID = auditHistory.getAuditID();
 
@@ -706,7 +713,7 @@ public class BusinessLayer {
         dao.updateAuditHistory(sql, newValue, auditID);          // newValue is passed in for Action col
 
     }
-    public void deleteAuditG(AuditHistory auditHistory, TableView table) throws SQLException, IOException, ClassNotFoundException {
+    protected void deleteAuditG(AuditHistory auditHistory, TableView table) throws SQLException, IOException, ClassNotFoundException {
         String sql = "DELETE FROM dbo.AuditHistory " +
                      "WHERE AuditID=?;";
 
@@ -719,7 +726,7 @@ public class BusinessLayer {
             table.getItems().remove(auditHistory);
         }
     }
-    public List<User> getUsersG() throws SQLException, IOException, ClassNotFoundException {
+    protected List<User> getUsersG() throws SQLException, IOException, ClassNotFoundException {
         List<User> list = new ArrayList<>();
 
         String sql = "OPEN SYMMETRIC KEY UsersNameKey " +
@@ -751,15 +758,11 @@ public class BusinessLayer {
         return list;
     }
 
-    public User getCurrentUser() {
+    protected User getCurrentUser() {
         return user;                       // used to get the current User that is signed in.. which is returned to the ChangePasswordController
     }
 
-    public void setPathVariable(String path) {
+    protected void setPathVariable(String path) {
         this.path = path;                          // sets the path static field for the BusinessLayer so path can be used in all methods
     }
-
-    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
-    }
-
 }

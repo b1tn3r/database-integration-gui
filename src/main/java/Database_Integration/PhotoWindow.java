@@ -32,16 +32,16 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class PhotoWindow extends Stage {
-    public ImageView imageView;
-    public MenuItem closeItem;
-    public Controller mainController;
-    public Stage subStage;
-    public Image image;
-    public File file;
-    public BorderPane borderPane;
-    public ImageViewPane viewPane;
+    private ImageView imageView;
+    private MenuItem closeItem;
+    private Controller mainController;
+    private Stage subStage;
+    private Image image;
+    private File file;
+    private BorderPane borderPane;
+    private ImageViewPane viewPane;
 
-    public PhotoWindow(Controller mainController, File file) throws IOException {
+    protected PhotoWindow(Controller mainController, File file) throws IOException {
 
         this.mainController = mainController;               // a new window is opened with the Controller as the parentController, which allows for this window to send information back and communicate with the Interface.fxml window
         subStage = new Stage();
@@ -122,19 +122,19 @@ public class PhotoWindow extends Stage {
 
         private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<ImageView>();        // the SimpleObjectProperty in the class holds an ImageView
 
-        public ImageViewPane() {
+        protected ImageViewPane() {
             this(new ImageView());            // the constructor for the class initializes and creates the ImageView object
         }
 
-        public ObjectProperty<ImageView> imageViewProperty() {
+        protected ObjectProperty<ImageView> imageViewProperty() {
             return imageViewProperty;                                     // method that returns the imageViewProperty
         }
 
-        public ImageView getImageView() {
+        protected ImageView getImageView() {
             return imageViewProperty.get();                          // method that returns the ImageView listed within the property
         }
 
-        public void setImageView(ImageView imageView) {
+        protected void setImageView(ImageView imageView) {
             this.imageViewProperty.set(imageView);                     // method that sets an ImageView to the ObjectProperty
         }
 
@@ -148,7 +148,7 @@ public class PhotoWindow extends Stage {
             }
             super.layoutChildren();
         }
-        public ImageViewPane(ImageView imageView) {
+        protected ImageViewPane(ImageView imageView) {
             imageViewProperty.addListener(new ChangeListener<ImageView>() {
                 @Override
                 public void changed(ObservableValue<? extends ImageView> arg0, ImageView oldIV, ImageView newIV) {        // a changeListener readjusts the class's child, ImageView, to auto resize every time the size of the ImageView is changed, and because the ImageView and Pane are fit to the surrounding borderPane, they resize with its width and height

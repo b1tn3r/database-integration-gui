@@ -71,7 +71,7 @@ public class FirstLoginController implements Initializable {
         }
         return false;
     }
-    
+
     private void alertBox(String title, String content) {
         Alert alertBox = new Alert(Alert.AlertType.ERROR);
         alertBox.setTitle(title);

@@ -1,6 +1,7 @@
 package Database_Integration;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -20,35 +21,39 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class InsertFormController implements Initializable {
-    public TextField firstNameField;
-    public TextField lastNameField;
-    public TextField positionField;
-    public TextField addressField;
-    public TextField cityField;
-    public TextField homePhoneField;
-    public TextField photoField;
-    public Button addPhoto;
-    public Button addToDB;
-    public Stage stage;                // stage is used to hold the stage passed through the init method as this.stage
-    public Button backButton;
-    public MenuItem closeItem;
-    public MenuItem aboutItem;
-    public MenuItem backItem;
+    @FXML private TextField firstNameField;
+    @FXML private TextField lastNameField;
+    @FXML private TextField positionField;
+    @FXML private TextField addressField;
+    @FXML private TextField cityField;
+    @FXML private TextField homePhoneField;
+    @FXML private TextField photoField;
+    @FXML private Button addPhoto;
+    @FXML private Button addToDB;
+    @FXML private Stage stage;                // stage is used to hold the stage passed through the init method as this.stage
+    @FXML private Button backButton;
+    @FXML private MenuItem closeItem;
+    @FXML private MenuItem aboutItem;
+    @FXML private MenuItem backItem;
 
-    public void closeFromMenu(ActionEvent event) {
+    @FXML
+    private void closeFromMenu(ActionEvent event) {
         BusinessLayer bl = new BusinessLayer();
         bl.closeFromMenuG();
     }
-    public void backToTable(ActionEvent event) throws IOException {
+    @FXML
+    private void backToTable(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.switchScene(event, "Interface.fxml");
     }
-    public void about(ActionEvent event) throws IOException {
+    @FXML
+    private void about(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.aboutG();
     }
 
-    public void addToDatabase(ActionEvent event) {
+    @FXML
+    private void addToDatabase(ActionEvent event) {
         try {
             String lastName = lastNameField.getText();
             String firstName = firstNameField.getText();
@@ -79,12 +84,13 @@ public class InsertFormController implements Initializable {
         }
     }
 
-    public void init(Stage stage) {        // this method is sent from Main and is used to pass the primaryStage to this controller
+    protected void init(Stage stage) {        // this method is sent from Main and is used to pass the primaryStage to this controller
         this.stage = stage;
     }
 
     // the button opens a fileChooser window that returns a file that sets its file path to the photoField
-    public void addPhoto(ActionEvent event) {
+    @FXML
+    private void addPhoto(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open an Image");
 
@@ -99,7 +105,8 @@ public class InsertFormController implements Initializable {
         }
     }
 
-    public void alertBox(String error) {
+    @FXML
+    private void alertBox(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(error);

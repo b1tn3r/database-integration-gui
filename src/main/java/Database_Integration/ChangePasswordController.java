@@ -1,6 +1,7 @@
 package Database_Integration;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,13 +15,14 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ChangePasswordController implements Initializable {
-    public TextField oldPasswordField;
-    public TextField newPasswordField;
-    public TextField confirmPasswordField;
-    public Button submitButton;
-    public Button cancelButton;
+    @FXML private TextField oldPasswordField;
+    @FXML private TextField newPasswordField;
+    @FXML private TextField confirmPasswordField;
+    @FXML private Button submitButton;
+    @FXML private Button cancelButton;
 
-    public void submit(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
+    @FXML
+    private void submit(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         BusinessLayer bl = new BusinessLayer();
         User user = bl.getCurrentUser();                                                         // the User object for the user currently logged in is returned so its password can be checked
 
@@ -67,13 +69,13 @@ public class ChangePasswordController implements Initializable {
             alertBox.showAndWait();
         }
     }
-    public void alertBox(String title, String content) {
+    private void alertBox(String title, String content) {
         Alert alertBox = new Alert(Alert.AlertType.ERROR);
         alertBox.setTitle(title);
         alertBox.setContentText(content);
         alertBox.showAndWait();
     }
-    public boolean containsWhiteSpace(String password) {
+    private boolean containsWhiteSpace(String password) {
         if(password != null){
             for(int i = 0; i < password.length(); i++){
                 if(Character.isWhitespace(password.charAt(i))){
@@ -83,7 +85,7 @@ public class ChangePasswordController implements Initializable {
         }
         return false;
     }
-    public boolean askSave() {
+    private boolean askSave() {
         Alert alertBox = new Alert(Alert.AlertType.CONFIRMATION);
         alertBox.setTitle("Save Password");
         alertBox.setContentText("Are you sure you want to save your new password?");
@@ -95,7 +97,8 @@ public class ChangePasswordController implements Initializable {
         }
     }
 
-    public void cancel(ActionEvent event) throws IOException {
+    @FXML
+    private void cancel(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.switchSceneWithDiffSize(event, "Interface.fxml", 700, 500);                          // if the user cancels they will go back to the main table screen without any changes or their connectionURL not being changed ever
     }

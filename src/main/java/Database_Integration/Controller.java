@@ -4,6 +4,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,26 +20,26 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    public TextField textField;
-    public Button searchButton;
-    public Button addEmployeeButton;
-    public TableView<Employee> table;
-    public MenuItem closeItem;
-    public MenuItem aboutItem;
-    public Button deleteButton;
-    public MenuItem displayPhotoItem;
-    public PhotoWindow photoController;
-    public Label userLabel;
-    public Button historyButton;
-    public Button logoutButton;
-    public ToggleButton toggleVisualsButton;
-    public Button changePasswordButton;
+    @FXML private TextField textField;
+    @FXML private Button searchButton;
+    @FXML private Button addEmployeeButton;
+    @FXML private TableView<Employee> table;
+    @FXML private MenuItem closeItem;
+    @FXML private MenuItem aboutItem;
+    @FXML private Button deleteButton;
+    @FXML private MenuItem displayPhotoItem;
+    private PhotoWindow photoController;
+    @FXML private Label userLabel;
+    @FXML private Button historyButton;
+    @FXML private Button logoutButton;
+    @FXML private ToggleButton toggleVisualsButton;
+    @FXML private Button changePasswordButton;
 
                                         // USE FORWARD SLASHES FOR THIS ONE BELOW
     private final String projectPath = "/Database_Integration/";
     private static String path;
 
-    public void properClose(Stage primaryStage) {
+    protected void properClose(Stage primaryStage) {
         primaryStage.setOnCloseRequest(e -> {
             e.consume();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -59,40 +60,33 @@ public class Controller implements Initializable {
         });
     }
 
-    public void closeFromMenu() {                     // used to close the window from the MenuItem "Close"
+    @FXML
+    private void closeFromMenu() {                     // used to close the window from the MenuItem "Close"
         BusinessLayer bl = new BusinessLayer();
         bl.closeFromMenuG();
     }
 
-    public void alertBox(String error) {
+    private void alertBox(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(error);
         alert.showAndWait();
     }
-    public void about(ActionEvent event) throws IOException {
+
+    @FXML
+    private void about(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.aboutG();
     }
 
-    public void changePassword(ActionEvent event) throws IOException {
+    @FXML
+    private void changePassword(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.switchSceneWithDiffSize(event, "ChangePassword.fxml", 611, 200);
     }
 
-    public void displaySelectedPhoto(ActionEvent event) throws IOException {
-        /* THIS WOULD OPEN A NEW SCENE UP WITHOUT ANY COMMUNICATION TO THE MAIN WINDOW
-        Parent root;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("PhotoWindow.fxml"));
-        root = loader.load();
-        Stage stage = new Stage();
-        stage.setX(50);
-        stage.setY(200);
-        stage.setTitle("Image Viewer");
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        */
+    @FXML
+    private void displaySelectedPhoto(ActionEvent event) throws IOException {
         try {
             Employee employee = table.getSelectionModel().getSelectedItem();
             File file = employee.getPhoto();                                                      // gets the selected Employee object in the table and gets its photo as a file
@@ -110,7 +104,8 @@ public class Controller implements Initializable {
         }
     }
 
-    public void search(ActionEvent e) {
+    @FXML
+    private void search(ActionEvent e) {
 
         try {
             String searchText = textField.getText();
@@ -141,12 +136,14 @@ public class Controller implements Initializable {
     }
 
     // This method will change the scene of the Window to the Insert Employee form
-    public void addEmployee(ActionEvent event) throws IOException {                        // the stage cannot be sent from main like in properClose because this is an action from a Button
+    @FXML
+    private void addEmployee(ActionEvent event) throws IOException {                        // the stage cannot be sent from main like in properClose because this is an action from a Button
         BusinessLayer bl = new BusinessLayer();
         bl.switchScene(event, "InsertForm.fxml");               // switchScene called from BusinessLayer that switches from the scene where the ActionEvent took place to the scene with "InsertForm.fxml" as the fxml file
     }
 
-    public void deleteEmployee(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
+    @FXML
+    private void deleteEmployee(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
         try {
             ObservableList<Employee> selectedEmployees;
             selectedEmployees = table.getSelectionModel().getSelectedItems();          // all the selected rows in the table are placed in an ObservableList
@@ -157,11 +154,15 @@ public class Controller implements Initializable {
             alertBox("You do not have the proper permissions to delete the selected rows.");
         }
     }
-    public void logout(ActionEvent event) throws IOException {
+
+    @FXML
+    private void logout(ActionEvent event) throws IOException {
         BusinessLayer bl = new BusinessLayer();
         bl.switchSceneWithDiffSize(event, "Login.fxml", 611, 200);
     }
-    public void viewHistory(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+
+    @FXML
+    private void viewHistory(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         try {
             Employee employee = table.getSelectionModel().getSelectedItem();        // the selected employee is gotten
 
@@ -177,7 +178,8 @@ public class Controller implements Initializable {
         }
     }
 
-    public void toggleVisuals(ActionEvent event) {
+    @FXML
+    private void toggleVisuals(ActionEvent event) {
         Node stageNode = (Node) event.getSource();               // the Scene  that the even takes place in is get
         Scene scene = stageNode.getScene();
         String css = this.getClass().getResource("/mainStylesheet.css").toExternalForm();          // the css stylesheet is get and stored to "css" variable

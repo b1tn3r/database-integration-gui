@@ -6,6 +6,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -28,17 +29,18 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class AuditHistoryTable {
-    public Stage stage;
-    public Scene scene;
-    public TableView table;
-    public HBox hBox;
-    public BorderPane borderPane;
-    public Label label1;
-    public Label label2;
-    public Button deleteButton;
-    public Region region;
+    private Stage stage;
+    private Scene scene;
+    private TableView table;
+    private HBox hBox;
+    private BorderPane borderPane;
+    private Label label1;
+    private Label label2;
+    private Button deleteButton;
+    private Region region;
+    private ScrollPane scrollPane;
 
-    public AuditHistoryTable(Employee employee) throws IOException {
+    protected AuditHistoryTable(Employee employee) throws IOException {
         stage = new Stage();
         stage.setX(50);
         stage.setY(200);
@@ -48,15 +50,15 @@ public class AuditHistoryTable {
 
         this.table = new TableView();
 
-        Label label1 = new Label();
+        label1 = new Label();
         label1.setText("Audit History for Employee:  ");
         label1.setFont(new Font("System", 14));
 
-        Label label2 = new Label();
+        label2 = new Label();
         label2.setText(employeeName);
         label2.setFont(new Font("System", 14));
 
-        Region region = new Region();
+        region = new Region();
         region.setMinWidth(Region.USE_COMPUTED_SIZE);
         region.setMinHeight(Region.USE_COMPUTED_SIZE);
         region.setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -64,7 +66,7 @@ public class AuditHistoryTable {
         region.setMaxHeight(Region.USE_COMPUTED_SIZE);
         region.setMaxWidth(Region.USE_COMPUTED_SIZE);
 
-        Button deleteButton = new Button();
+        deleteButton = new Button();
         deleteButton.setText("Delete Record");
         deleteButton.setFont(new Font("System", 13));
         deleteButton.setOnAction(e -> {
@@ -82,7 +84,7 @@ public class AuditHistoryTable {
             }
         });
 
-        HBox hBox = new HBox();
+        hBox = new HBox();
         hBox.getChildren().addAll(label1, label2, region, deleteButton);
         hBox.setPadding(new Insets(13, 13, 13, 13));
         hBox.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -101,7 +103,7 @@ public class AuditHistoryTable {
         table.setMaxHeight(Region.USE_COMPUTED_SIZE);
         table.setMaxWidth(Region.USE_COMPUTED_SIZE);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        ScrollPane scrollPane = new ScrollPane();
+        scrollPane = new ScrollPane();
         scrollPane.setContent(table);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
@@ -113,7 +115,7 @@ public class AuditHistoryTable {
         scrollPane.setMaxWidth(Region.USE_COMPUTED_SIZE);
 
 
-        BorderPane borderPane = new BorderPane();
+        borderPane = new BorderPane();
         borderPane.setTop(hBox);
         borderPane.setCenter(scrollPane);
         borderPane.setMinWidth(Region.USE_COMPUTED_SIZE);
@@ -127,7 +129,7 @@ public class AuditHistoryTable {
         stage.show();
     }
 
-    public void addTableData(List<AuditHistory> auditList) {
+    protected void addTableData(List<AuditHistory> auditList) {
 
         table.setEditable(true);
 
@@ -181,9 +183,4 @@ public class AuditHistoryTable {
 
         table.getColumns().addAll(actionDateColumn, actionColumn, userNameColumn, passwordColumn);            // columns populate the table
     }
-
-    public static void main(String[] args) {
-
-    }
-
 }
