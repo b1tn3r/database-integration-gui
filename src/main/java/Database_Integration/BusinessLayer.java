@@ -34,13 +34,14 @@ public class BusinessLayer {
     private static User user;
     private static int userID;                 // this is used as an instance to hold the current value of the user so it can be used for inserting information into dbo.AuditHistory table
 
-    protected void changeUserG(User user, String password) throws IOException, SQLException, ClassNotFoundException {
+    protected void changeUserG(User user, String password) throws Exception {
         DataAccessObject dao = new DataAccessObject();
         this.user = dao.changeProperty(user, password);                   // the user is stored as an instance to the class so the user's getUsername() can be called to place the username into a Label in the UI
         this.userID = user.getUserID();                                 // the user's UserID is saved as an instance so the userID can be retrieved to be used in inserting AuditHistory records with the userID inserted to show what user inserted itk
+        password = null;                                         // made null to be garbage collected later
     }
 
-    protected boolean checkHashFunction(String checkPassword, String checkHash) throws SQLException, IOException, ClassNotFoundException {
+    protected boolean checkHashFunction(String checkPassword, String checkHash) throws Exception {
 
         String sql = "SELECT HASHBYTES('SHA2_512', '" + checkPassword + "')";          // sql statement that gets the hash value that will be get for the password value from the password text field
         DataAccessObject dao = new DataAccessObject();
@@ -64,7 +65,7 @@ public class BusinessLayer {
         return answer;
     }
 
-    protected void updatePassword(String newPassword, String oldPassword, User user) throws SQLException, IOException, ClassNotFoundException {
+    protected void updatePassword(String newPassword, String oldPassword, User user) throws Exception {
         DataAccessObject dao = new DataAccessObject();
 
         String hashSQL = "SELECT HASHBYTES('SHA2_512', '" + newPassword + "')";           // first the hash value is returned for the new password
@@ -241,7 +242,7 @@ public class BusinessLayer {
         return user;
     }
 
-    protected List<Employee> findEmployees(String searchText, int answer) throws SQLException, IOException, ClassNotFoundException {
+    protected List<Employee> findEmployees(String searchText, int answer) throws Exception {
         BusinessLayer bl = new BusinessLayer();
 
         List<Employee> list = null;
@@ -256,7 +257,7 @@ public class BusinessLayer {
         return list;         // the list is returned of either all the employees without the photo column or a specific search of employees with the photo column, in which answer will still be used to tell the table what columns to display
     }
 
-    private List<Employee> searchEmployeesG(String searchText) throws SQLException, IOException, ClassNotFoundException {
+    private List<Employee> searchEmployeesG(String searchText) throws Exception {
         List<Employee> list = new ArrayList<>();
 
         String search = "%" + searchText + "%";     // this will wrap lastName in placeholders %last% to show there could be more or after the string inputted
@@ -283,7 +284,7 @@ public class BusinessLayer {
         return list;
     }
 
-    private List<Employee> getAllEmployeesG() throws SQLException, IOException, ClassNotFoundException {
+    private List<Employee> getAllEmployeesG() throws Exception {
         List<Employee> list = new ArrayList<>();       // a list with type Employee object is created
 
         String sql = "SELECT * FROM HumanResources.Employees";
@@ -381,6 +382,8 @@ public class BusinessLayer {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -401,6 +404,8 @@ public class BusinessLayer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -423,6 +428,8 @@ public class BusinessLayer {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -443,6 +450,8 @@ public class BusinessLayer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -465,6 +474,8 @@ public class BusinessLayer {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -485,6 +496,8 @@ public class BusinessLayer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -540,6 +553,8 @@ public class BusinessLayer {
                                 e.printStackTrace();
                             } catch (ClassNotFoundException e) {
                                 e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -564,7 +579,7 @@ public class BusinessLayer {
         }
     }
 
-    private String updateEmployeeG(int column, String newValue, Employee employee) throws SQLException, IOException, ClassNotFoundException {
+    private String updateEmployeeG(int column, String newValue, Employee employee) throws Exception {
         String sql = null;
         if(column == 1) {
             sql = "UPDATE HumanResources.Employees " +          // depending on what column was changed, a different sql statement will be used so only one column needs to be updated in the database
@@ -607,7 +622,7 @@ public class BusinessLayer {
         return answer;                                                    // the answer from the commit alert box is returned back to the cell so the table does not update by itself if the answer is "no"
     }
 
-    protected void addEmployeeG(Employee employee, ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
+    protected void addEmployeeG(Employee employee, ActionEvent event) throws Exception {
         String sql = "INSERT INTO HumanResources.Employees " +
                      "(LastName, FirstName, Title, Address, City, HomePhone, Photo) " +
                      "VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -628,7 +643,7 @@ public class BusinessLayer {
         }
     }
 
-    protected void deleteEmployeeG(ObservableList<Employee> selectedEmployees, TableView table) throws SQLException, IOException, ClassNotFoundException {
+    protected void deleteEmployeeG(ObservableList<Employee> selectedEmployees, TableView table) throws Exception {
         List<Employee> list = new ArrayList<>(selectedEmployees);
 
         String sql = "DELETE FROM dbo.AuditHistory " +
@@ -659,7 +674,7 @@ public class BusinessLayer {
         dao.close();
     }
 
-    protected void createAuditTable(Employee employee) throws SQLException, IOException, ClassNotFoundException {
+    protected void createAuditTable(Employee employee) throws Exception {
         String sql = "OPEN SYMMETRIC KEY UsersNameKey DECRYPTION BY CERTIFICATE KeyProtectionCertificate; " +
                      "SELECT Username, HASHBYTES('SHA2_512', CAST(DecryptByKey(Password) as varchar(50))), " +
                             "CAST(DecryptByKey(LastName) as varchar(50)), " +
@@ -701,7 +716,7 @@ public class BusinessLayer {
         return auditHistory;
     }
 
-    protected void updateAuditG(int column, String newValue, AuditHistory auditHistory) throws SQLException, ClassNotFoundException, IOException {
+    protected void updateAuditG(int column, String newValue, AuditHistory auditHistory) throws Exception {
 
         int auditID = auditHistory.getAuditID();
 
@@ -713,7 +728,7 @@ public class BusinessLayer {
         dao.updateAuditHistory(sql, newValue, auditID);          // newValue is passed in for Action col
 
     }
-    protected void deleteAuditG(AuditHistory auditHistory, TableView table) throws SQLException, IOException, ClassNotFoundException {
+    protected void deleteAuditG(AuditHistory auditHistory, TableView table) throws Exception {
         String sql = "DELETE FROM dbo.AuditHistory " +
                      "WHERE AuditID=?;";
 
@@ -726,7 +741,7 @@ public class BusinessLayer {
             table.getItems().remove(auditHistory);
         }
     }
-    protected List<User> getUsersG() throws SQLException, IOException, ClassNotFoundException {
+    protected List<User> getUsersG() throws Exception {
         List<User> list = new ArrayList<>();
 
         String sql = "OPEN SYMMETRIC KEY UsersNameKey " +

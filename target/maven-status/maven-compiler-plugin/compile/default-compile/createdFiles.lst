@@ -20,6 +20,7 @@ Database_Integration\BusinessLayer$7$2.class
 Database_Integration\BusinessLayer$7.class
 Database_Integration\PhotoWindow$ImageViewPane$1.class
 Database_Integration\Employee.class
+Database_Integration\EncryptionAPI.class
 Database_Integration\AuditHistoryTable.class
 Database_Integration\BusinessLayer$4.class
 Database_Integration\DataAccessObject.class

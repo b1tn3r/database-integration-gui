@@ -22,7 +22,7 @@ public class FirstLoginController implements Initializable {
     @FXML private List<User> userList;
 
     @FXML
-    private void login(ActionEvent event) throws SQLException, IOException, ClassNotFoundException, IllegalArgumentException {
+    private void login(ActionEvent event) throws Exception {
         for(User user: userList) {
             if(((String) comboBox.getValue()).equals(user.getUsername())) {
                 User attemptUser = user;
@@ -97,6 +97,8 @@ public class FirstLoginController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

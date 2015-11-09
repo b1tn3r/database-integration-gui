@@ -3,6 +3,11 @@ package Database_Integration;
 URL, username, password and any other connection properties are placed in a .properties file
 because the connection information is usually not hardcoded in the source code
  */
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.*;
 import java.io.*;
@@ -10,12 +15,12 @@ import java.io.*;
 public class DataAccessObject {
     private static Connection conn;
     private static Properties props;
-    private static String connectionURL;
+    private static byte[] connectionURL;
     private static String path;
     private static String propertiesFile = "/connection.properties";           // when connection.properties is accessed the getResource method is used to get the file from the resources dir and then the path is taken from it
 
     // Constructor will Connect to Database
-    private void connectFirst() throws ClassNotFoundException, SQLException, IOException {
+    private void connectFirst() throws Exception {
         if(this.conn != null) {
             this.conn.close();        // closes any old connection when connect() is called
         }
@@ -31,27 +36,31 @@ public class DataAccessObject {
         */
         String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";          // the connection.properties file would not work in the Jar file, so these were just uploaded to the DataAccess Object
         if(connectionURL == null) {
-            connectionURL = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=UsernameAccess;password=PublicPassword";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=UsernameAccess;password=PublicPassword";
+            this.connectionURL = EncryptionAPI.getInstance().encrypt(url);
         }
 
         // ____________ Connect to Database ___________________________
         Class.forName(driver);
-        conn = DriverManager.getConnection(connectionURL);
+        conn = DriverManager.getConnection(EncryptionAPI.getInstance().decrypt(connectionURL));
         conn.setAutoCommit(false);
     }
 
-    protected void connect() throws ClassNotFoundException, SQLException, IOException {
+    protected void connect() throws Exception {
         if(this.conn != null) {
             this.conn.close();        // closes any old connection when connect() is called
         }
 
-        conn = DriverManager.getConnection(connectionURL);
+        conn = DriverManager.getConnection(EncryptionAPI.getInstance().decrypt(connectionURL));
         conn.setAutoCommit(false);
     }
 
-    protected User changeProperty(User user, String password) throws ClassNotFoundException, SQLException, IOException {         // this method changes the connectionURL for all connection made to the database to change to a specified user in the Login screen
+    protected User changeProperty(User user, String password) throws ClassNotFoundException, SQLException, IOException, Exception {         // this method changes the connectionURL for all connection made to the database to change to a specified user in the Login screen
 
-        this.connectionURL = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;      // the connectionURL is stored as a static instance of the class so it will be used by all connections after this change is made.. it changes the connection username and password to that of the user wanting to log in
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;      // the connectionURL is stored as a static instance of the class so it will be used by all connections after this change is made.. it changes the connection username and password to that of the user wanting to
+        this.connectionURL = EncryptionAPI.getInstance().encrypt(url);                                                                   // the connectionURL is encrypted so that no attack can take place while the application is running to acquire the connectionURL that appears everywhere
+        url = null;
+        password = null;                  // made null so they can be garbage collected back in the Login Controllers
 
         return user;                       // the userID of the user is returned to be used in the business layer so the records of the user are inserted into dbo.AuditHistory
     }
@@ -70,7 +79,7 @@ public class DataAccessObject {
     }
 
     // This will be the method to add an employee to the database after all the fields in the form have been filled out
-    protected String addEmployee(Employee employee, String sql, String queryEmployeeID, String auditSql, int userID) throws SQLException, ClassNotFoundException, IOException {
+    protected String addEmployee(Employee employee, String sql, String queryEmployeeID, String auditSql, int userID) throws Exception {
         Statement queryStatement = null;
         PreparedStatement prepStatement = null;
 
@@ -130,7 +139,7 @@ public class DataAccessObject {
         }
     }
 
-    protected String updateEmployee(String sql, String newValue, int id, int column, String auditSql, int userID) throws ClassNotFoundException, SQLException, IOException {
+    protected String updateEmployee(String sql, String newValue, int id, int column, String auditSql, int userID) throws Exception {
         PreparedStatement prepStatement = null;
 
         try {
@@ -167,7 +176,7 @@ public class DataAccessObject {
     }
 
     // A method to retrieve all Rows from Employees table that returns a List<Employee>
-    protected ResultSet getAllEmployees(String sql) throws ClassNotFoundException, SQLException, IOException {
+    protected ResultSet getAllEmployees(String sql) throws Exception {
         connect();
         List<Employee> list = new ArrayList<>();       // a list with type Employee object is created
         Statement statement = null;
@@ -181,7 +190,7 @@ public class DataAccessObject {
     }
 
     // A method to search for any Employee row data that matches a lastName String entered by the user.. returns a list with type Employee to be used to output to the interface
-    protected ResultSet searchEmployees(String search, String sql) throws ClassNotFoundException, SQLException, IOException {
+    protected ResultSet searchEmployees(String search, String sql) throws Exception {
         connect();
         List<Employee> list = new ArrayList<>();
         PreparedStatement prepStatement = null;
@@ -215,7 +224,7 @@ public class DataAccessObject {
         return conn;
     }
 
-    protected ResultSet getAuditHistory(String sql, int employeeID) throws SQLException, ClassNotFoundException, IOException {
+    protected ResultSet getAuditHistory(String sql, int employeeID) throws Exception {
         PreparedStatement prepStatement = null;
         ResultSet resultSet = null;
 
@@ -229,7 +238,7 @@ public class DataAccessObject {
         return resultSet;
     }
 
-    protected void updateAuditHistory(String sql, String newValue, int auditID) throws SQLException, IOException, ClassNotFoundException {
+    protected void updateAuditHistory(String sql, String newValue, int auditID) throws Exception {
         PreparedStatement prepStatement = null;
 
         try {
@@ -248,7 +257,7 @@ public class DataAccessObject {
         }
     }
 
-    protected String deleteAuditHistory(String sql, int auditID) throws SQLException, IOException, ClassNotFoundException {
+    protected String deleteAuditHistory(String sql, int auditID) throws Exception {
         PreparedStatement prepStatement = null;
 
         connect();
@@ -266,7 +275,7 @@ public class DataAccessObject {
         return answer;
     }
 
-    protected ResultSet getLoginUsers(String sql) throws SQLException, IOException, ClassNotFoundException {
+    protected ResultSet getLoginUsers(String sql) throws Exception {
         PreparedStatement prepStatement = null;
 
         connectFirst();

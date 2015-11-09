@@ -27,7 +27,7 @@ public class LoginController implements Initializable {
     @FXML private static List<User> userList;
 
     @FXML
-    private void login(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
+    private void login(ActionEvent event) throws Exception {
         for(User user: userList) {
             if(((String) comboBox.getValue()).equals(user.getUsername())) {          // if the comboBox value is equal to one of the user's usernames being cycled through, it will then go on to check the password
                 User attemptUser = user;
@@ -107,6 +107,8 @@ public class LoginController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

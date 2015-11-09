@@ -22,7 +22,7 @@ public class ChangePasswordController implements Initializable {
     @FXML private Button cancelButton;
 
     @FXML
-    private void submit(ActionEvent event) throws SQLException, IOException, ClassNotFoundException {
+    private void submit(ActionEvent event) throws Exception {
         BusinessLayer bl = new BusinessLayer();
         User user = bl.getCurrentUser();                                                         // the User object for the user currently logged in is returned so its password can be checked
 

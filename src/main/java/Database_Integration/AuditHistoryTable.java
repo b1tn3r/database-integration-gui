@@ -81,6 +81,8 @@ public class AuditHistoryTable {
                 e1.printStackTrace();
             } catch (ClassNotFoundException e1) {
                 e1.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         });
 
@@ -161,6 +163,8 @@ public class AuditHistoryTable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

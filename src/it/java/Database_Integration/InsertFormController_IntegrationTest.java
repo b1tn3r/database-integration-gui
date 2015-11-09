@@ -7,7 +7,6 @@ import org.junit.experimental.categories.Category;
 
 import static org.junit.Assert.*;
 
-@Category(IntegrationTest.class)
 public class InsertFormController_IntegrationTest {
 
     private InsertFormController controller;

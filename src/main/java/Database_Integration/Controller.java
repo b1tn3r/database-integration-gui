@@ -152,6 +152,8 @@ public class Controller implements Initializable {
             bl.deleteEmployeeG(selectedEmployees, table);                    // the selectedEmployee ObservableList is passed to the business layer
         } catch(SQLException ex) {
             alertBox("You do not have the proper permissions to delete the selected rows.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
