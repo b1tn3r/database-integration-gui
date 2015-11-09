@@ -55,14 +55,15 @@ public class InsertFormController implements Initializable {
     @FXML
     private void addToDatabase(ActionEvent event) {
         try {
-            String lastName = lastNameField.getText();
-            String firstName = firstNameField.getText();
-            String position = positionField.getText();
-            String address = addressField.getText();
-            String city = cityField.getText();
-            String phone = homePhoneField.getText();         // all variables set from their text fields values except for file, which needs to be taken from a filechooser
+            String lastName = EncryptionAPI.getInstance().filterString(lastNameField.getText());
+            String firstName = EncryptionAPI.getInstance().filterString(firstNameField.getText());
+            String position = EncryptionAPI.getInstance().filterString(positionField.getText());
+            String address = EncryptionAPI.getInstance().filterString(addressField.getText());
+            String city = EncryptionAPI.getInstance().filterString(cityField.getText());
+            String phone = EncryptionAPI.getInstance().filterString(homePhoneField.getText());         // all variables set from their text fields values except for file, which needs to be taken from a filechooser
 
-            File file = new File(photoField.getText());         // a new file is made from the path given to the photoField from the fileChooser
+            File file = new File(EncryptionAPI.getInstance().filterString(photoField.getText()));         // a new file is made from the path given to the photoField from the fileChooser
+
 
             Employee employee = new Employee(0, lastName, firstName, position, address, city, phone, file);     // an Employee object is created from all the values in the fields
 

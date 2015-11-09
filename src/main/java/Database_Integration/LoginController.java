@@ -35,6 +35,8 @@ public class LoginController implements Initializable {
                 String checkHash = attemptUser.getPassword();
                 String checkPassword = passwordField.getText();                    // the hashed password from the user object and the password from the password textbox are used to check against each other.
 
+                checkPassword = EncryptionAPI.getInstance().filterPasswords(EncryptionAPI.getInstance().filterString(checkPassword));      // the password inputted into the passwordField is filtered for malicious input
+
                 boolean isWhitespace = containsWhiteSpace(checkPassword);        // the password input is checked for whitespaces to ensure that the user does not try to use any type of injection to the database
                 if(isWhitespace) {
                     alertBox("Password Not Allowed", "You cannot have spaces in your password.");

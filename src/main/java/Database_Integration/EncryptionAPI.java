@@ -1,5 +1,7 @@
 package Database_Integration;
 
+import sun.security.validator.ValidatorException;
+
 import javax.crypto.*;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -7,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.HashMap;
+import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,14 +71,78 @@ public class EncryptionAPI {
             throw new IllegalArgumentException();
         }
 
-        return s;
+        try {
+
+            return s;
+        } finally {
+            str = null;
+            s = null;              // str and s are made to null after so that they can be garbage collected if they are passwords
+        }
     }
 
-    public static void main(String[] args) {
+    protected static String filterPasswords(String str) throws ValidatorException {
+        BusinessLayer bl = new BusinessLayer();
+
+        if(str.length() <= 7 || str.length() >= 16) {
+            bl.alertBox("The password needs to be at least 8 characters and can be no more than 15 characters long.");
+            throw new ValidatorException("Password too long or short.");
+        }
+
+        int count = 0;
+        for(int i = 0; i < str.length(); i++) {
+            if(str.substring(i, i+1).matches("[^A-Za-z0-9 ]")) {
+                count++;
+                if(count == 2) {
+                    bl.alertBox("There can only be one character in the password.");
+                    throw new ValidatorException("Can only have one character in a password.");
+                }
+            }
+        }
+        try {
+            return str;
+        } finally {
+            str = null;       // str is made null so it can be garbage collected when System.gc() is called
+        }
+    }
+
+    protected static String filterSearch(String str) throws ValidatorException {
+        BusinessLayer bl = new BusinessLayer();
+
+        if(str.length() > 30) {
+            bl.alertBox("Search input cannot be more than 30 characters.");
+            throw new ValidatorException("Cannot be more than 30 characters.");
+        }
+
+        if(str.matches("[^A-Za-z0-9 ]")) {
+            bl.alertBox("Cannot enter any special characters.");
+            throw new ValidatorException("Cannot enter any special characters.");
+        }
+        int count = 0;
+        for(int i = 0; i < str.length(); i++) {
+            if(Character.isWhitespace(str.charAt(i))) {
+                count++;
+                if(count == 2) {
+                    bl.alertBox("Cannot enter more than one whitespace between a first and last name.");
+                    throw new ValidatorException("Only one whitespace allowed.");
+                }
+            }
+        }
+
+        return str;
+    }
+
+    protected static String filterInput(String str) {
+
+
+        return str;
+    }
+
+    public static void main(String[] args) throws ValidatorException {
         String maliciousInput = "<scr" + "\uFDEF" + "ipt>";     // the middle part of the malicious String tries to bypass the filter by using unknown characters to Unicode to complete a "<script>"
         String s = filterString(maliciousInput);
         System.out.println(s);
-
-        System.out.println(filterString("<script>"));       // this will throw an exception
+        System.out.println(filterPasswords("Jackpot1%"));
+        System.out.println(filterSearch("Michael Bitner"));
+        //System.out.println(filterString("<script>"));       // this will throw an exception
     }
 }

@@ -108,7 +108,7 @@ public class Controller implements Initializable {
     private void search(ActionEvent e) {
 
         try {
-            String searchText = textField.getText();
+            String searchText = EncryptionAPI.getInstance().filterString(textField.getText());
 
             int answer;          // answer will be used to determine if searchEmployees was called or getAllEmployees and will be used to determine if Photo should be added to the table
 

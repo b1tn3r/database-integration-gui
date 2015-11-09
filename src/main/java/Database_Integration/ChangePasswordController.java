@@ -28,6 +28,9 @@ public class ChangePasswordController implements Initializable {
 
         String checkHash = user.getPassword();
         String checkPassword = oldPasswordField.getText();                 // user's hashed password and password from field are initialized.. password from field is checked for whitespaces to stop sql injection
+
+        checkPassword = EncryptionAPI.getInstance().filterPasswords(EncryptionAPI.getInstance().filterString(checkPassword));            // oldPassword is filtered for malicious input, ensure they are the right length, and only have one special character
+
         boolean isWhitespace = containsWhiteSpace(checkPassword);
         if(isWhitespace) {
             alertBox("Password Not Allowed", "You cannot have spaces in your input in the Old Password textbox.");
@@ -40,6 +43,9 @@ public class ChangePasswordController implements Initializable {
             String newPassword1 = newPasswordField.getText();
             String newPassword2 = confirmPasswordField.getText();
             if(newPassword1.equals(newPassword2)) {                                                                         // the new and confirm passwords are compared to ensure they match one another
+
+                newPassword1 = EncryptionAPI.getInstance().filterPasswords(EncryptionAPI.getInstance().filterString(newPassword1));             // newPassword (one of them because they should be the same at this point) is filtered for malicious input and validation
+
                 boolean isWhitespace2 = containsWhiteSpace(newPassword1);
                 if(isWhitespace2) {
                     alertBox("Password Not Allowed", "You cannot have spaces in your input in the New Password or Confirm Password textboxes.");        // checks if either the new or confirm password fields have whitespaces in the input
@@ -60,8 +66,15 @@ public class ChangePasswordController implements Initializable {
                 }
             } else {
                 alertBox("Passwords Do Not Match", "The password you entered in the New Password textbox does not match the textbox input for the Confirm Password.");
+                checkPassword = null;
+                newPassword1 = null;
+                newPassword2 = null;
+                System.gc();                 // all entered passwords are garbage collected if errors
             }
         } else {
+            checkPassword = null;         // garbage collected if error
+            System.gc();
+
             Alert alertBox = new Alert(Alert.AlertType.ERROR);
             alertBox.setTitle("Incorrect Old Password");
             alertBox.setContentText("The old password that was entered for " + user.getLastName() + " " + user.getFirstName() + " does not match the current password on file." +

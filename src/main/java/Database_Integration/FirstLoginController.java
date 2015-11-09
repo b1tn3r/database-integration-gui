@@ -30,6 +30,8 @@ public class FirstLoginController implements Initializable {
                 String checkHash = attemptUser.getPassword();
                 String checkPassword = passwordField.getText();
 
+                checkPassword = EncryptionAPI.getInstance().filterPasswords(EncryptionAPI.getInstance().filterString(checkPassword));           // inputted password filtered for malicious input
+
                 boolean isWhitespace = containsWhiteSpace(checkPassword);        // the password input is checked for whitespaces to ensure that the user does not try to use any type of injection to the database
                 if(isWhitespace) {
                     alertBox("Password Not Allowed", "You cannot have spaces in your password.");
