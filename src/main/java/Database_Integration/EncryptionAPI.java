@@ -4,7 +4,11 @@ import javax.crypto.*;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** This is used to encrypt and decrypt any sensitive variables with a Password, database info, etc
  * It uses a Singleton design pattern to use as a static object between all classes
@@ -49,7 +53,27 @@ public class EncryptionAPI {
         return new String(plainText);
     }
 
+    protected static String filterString(String str) {
+        String s = Normalizer.normalize(str, Form.NFKC);          // first normalizes the String input by normalizing it to the NFKC form that first uses Compatibility Decomposition and then uses Canonical Composition
 
+        // Replaces all noncharacter code points with Unicode U+FFFD
+        s = s.replaceAll("[\\p{Cn}]", "\uFFFD");         // this replacement of unknown characters to Unicode ensures no malicious script can bypass the validation filter by being in unknown characters
 
+        // Validate Input
+        Pattern pattern = Pattern.compile("<script>");        // this looks for a <script> pattern in the input to ensure no script is run
+        Matcher matcher = pattern.matcher(s);
+        if(matcher.find()) {
+            throw new IllegalArgumentException();
+        }
 
+        return s;
+    }
+
+    public static void main(String[] args) {
+        String maliciousInput = "<scr" + "\uFDEF" + "ipt>";     // the middle part of the malicious String tries to bypass the filter by using unknown characters to Unicode to complete a "<script>"
+        String s = filterString(maliciousInput);
+        System.out.println(s);
+
+        System.out.println(filterString("<script>"));       // this will throw an exception
+    }
 }
