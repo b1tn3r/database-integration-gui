@@ -63,6 +63,8 @@ public class EncryptionAPI {
         Pattern pattern = Pattern.compile("<script>");        // this looks for a <script> pattern in the input to ensure no script is run
         Matcher matcher = pattern.matcher(s);
         if(matcher.find()) {
+            BusinessLayer bl = new BusinessLayer();
+            bl.alertBox("Malicious <script> Input Detected");
             throw new IllegalArgumentException();
         }
 
