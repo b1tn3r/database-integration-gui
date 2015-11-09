@@ -94,7 +94,7 @@ public class EncryptionAPI {
                 count++;
                 if(count == 2) {
                     bl.alertBox("There can only be one character in the password.");
-                    throw new ValidatorException("Can only have one character in a password.");
+                    throw new ValidatorException("Can only have one special character in a password.");
                 }
             }
         }
@@ -109,40 +109,73 @@ public class EncryptionAPI {
         BusinessLayer bl = new BusinessLayer();
 
         if(str.length() > 30) {
-            bl.alertBox("Search input cannot be more than 30 characters.");
-            throw new ValidatorException("Cannot be more than 30 characters.");
+            //bl.alertBox("Search input cannot be more than 30 characters.");
+            throw new ValidatorException("Search input cannot be more than 30 characters.");
         }
 
-        if(str.matches("[^A-Za-z0-9 ]")) {
-            bl.alertBox("Cannot enter any special characters.");
-            throw new ValidatorException("Cannot enter any special characters.");
-        }
         int count = 0;
         for(int i = 0; i < str.length(); i++) {
             if(Character.isWhitespace(str.charAt(i))) {
                 count++;
                 if(count == 2) {
-                    bl.alertBox("Cannot enter more than one whitespace between a first and last name.");
-                    throw new ValidatorException("Only one whitespace allowed.");
+                    //bl.alertBox("Cannot enter more than one whitespace between a first and last name.");
+                    throw new ValidatorException("Cannot enter more than one whitespace between a first and last name.");
                 }
+            }
+            if (str.substring(i, i + 1).matches("[^A-Za-z0-9 ]")) {
+                //bl.alertBox("Cannot enter any special characters.");
+                throw new ValidatorException("Cannot enter any special characters.");
             }
         }
 
         return str;
     }
 
-    protected static String filterInput(String str) {
+    protected static String filterInput(String str) throws ValidatorException {
+        BusinessLayer bl = new BusinessLayer();
+
+        if(str.length() <= 0 || str.length() > 65) {
+            //bl.alertBox("Each input has to be at least 1 character and cannot be greater than 65 characters.");
+            throw new ValidatorException("Each input has to be at least 1 character and cannot be greater than 65 characters.");
+        }
+        String charactersAllowed = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890.,#- ()";
+
+        char[] charArray = str.toCharArray();
+
+        for(int i = 0; i < charArray.length; i++) {
+            if(charactersAllowed.indexOf(charArray[i]) < 0) {
+                //bl.alertBox("The only special characters allowed are .,#-()");
+                throw new ValidatorException("The only special characters allowed are .,#-()");
+            }
+        }
 
 
         return str;
     }
 
+    protected static String filterFile(String str) throws ValidatorException {
+        BusinessLayer bl = new BusinessLayer();
+
+        int index = str.lastIndexOf(".");
+        String ext = str.substring(index, str.length());
+        System.out.println(ext);
+        if(ext.equals(".png") || ext.equals(".jpeg") || ext.equals(".bmp") || ext.equals(".gif") || ext.equals(".jpg") ||
+                ext.equals(".bpg") || ext.equals(".ppm") || ext.equals(".pgm") || ext.equals(".pbm") || ext.equals(".pnm") || ext.equals(".tif")) {
+            return str;
+        } else {
+            //bl.alertBox("The photo file must be an image.");
+            throw new ValidatorException("The photo file does not have an image extension.");
+        }
+    }
+
     public static void main(String[] args) throws ValidatorException {
         String maliciousInput = "<scr" + "\uFDEF" + "ipt>";     // the middle part of the malicious String tries to bypass the filter by using unknown characters to Unicode to complete a "<script>"
         String s = filterString(maliciousInput);
+        //System.out.println(filterString("<script>"));       // this will throw an exception
         System.out.println(s);
         System.out.println(filterPasswords("Jackpot1%"));
-        System.out.println(filterSearch("Michael Bitner"));
-        //System.out.println(filterString("<script>"));       // this will throw an exception
+        System.out.println(filterSearch("Micheal2 Bitner3"));
+        System.out.println(filterInput("Some input#383"));
+        System.out.println(filterFile("image.jpeg"));
     }
 }
