@@ -36,7 +36,8 @@ public class DataAccessObject {
         */
         String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";          // the connection.properties file would not work in the Jar file, so these were just uploaded to the DataAccess Object
         if(connectionURL == null) {
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=UsernameAccess;password=PublicPassword";
+            String url = "jdbc:sqlserver://192.168.0.2:1433;databaseName=NWTraders;username=UsernameAccess;password=PublicPassword";
+            //String url = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=UsernameAccess;password=PublicPassword";
             this.connectionURL = EncryptionAPI.getInstance().encrypt(url);
         }
 
@@ -57,7 +58,8 @@ public class DataAccessObject {
 
     protected User changeProperty(User user, String password) throws ClassNotFoundException, SQLException, IOException, Exception {         // this method changes the connectionURL for all connection made to the database to change to a specified user in the Login screen
 
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;      // the connectionURL is stored as a static instance of the class so it will be used by all connections after this change is made.. it changes the connection username and password to that of the user wanting to
+        String url = "jdbc:sqlserver://192.168.0.2:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;      // the connectionURL is stored as a static instance of the class so it will be used by all connections after this change is made.. it changes the connection username and password to that of the user wanting to
+        //String url = "jdbc:sqlserver://localhost:1433;databaseName=NWTraders;username=" + user.getUsername() + ";password=" + password;
         this.connectionURL = EncryptionAPI.getInstance().encrypt(url);                                                                   // the connectionURL is encrypted so that no attack can take place while the application is running to acquire the connectionURL that appears everywhere
         url = null;
         password = null;                  // made null so they can be garbage collected back in the Login Controllers
