@@ -16,6 +16,6 @@ Program built ~2015 and is not maintained so the application could be drasticall
 
 4. Maven commands can be used to re-build, test, and deploy project once ready for production.
 
-##License
+## License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details
