@@ -92,7 +92,7 @@ public class FirstLoginController implements Initializable {
                 comboBox.getItems().add(user.getUsername());
             }
 
-            String currentUser = "b1tn3r";
+            String currentUser = "myAdmin";
             comboBox.setValue(currentUser);
         } catch (SQLException e) {
             e.printStackTrace();

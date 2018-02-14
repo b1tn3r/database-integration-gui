@@ -1,6 +1,6 @@
 -- The logins on the server and the users in the database can either be created manually with ensuring that each of the logins and users have a default username and starting password of:
 -- Login/User - Password
--- b1tn3r     - testPassword
+-- myAdmin     - testPassword
 -- sWaters    - testPassword
 -- aJohnson   - testPassword
 -- cAllens    - testPassword
@@ -15,12 +15,12 @@
 -- create logins first: select ONLY sql between comment lines and execute ___________________________________________________________________________________________
 USE master
 GO
-CREATE LOGIN b1tn3r
+CREATE LOGIN myAdmin
     WITH PASSWORD = 'testPassword',
 	DEFAULT_DATABASE = NWTraders,
 	CHECK_EXPIRATION=OFF,
     CHECK_POLICY=OFF
-GRANT SELECT ALL USER SECURABLES TO b1tn3r;
+GRANT SELECT ALL USER SECURABLES TO myAdmin;
 
 CREATE LOGIN sWaters
 	WITH PASSWORD = 'testPassword',
@@ -65,7 +65,7 @@ CREATE LOGIN aJohnson
 -- create users: select ONLY the sql between the comment lines and execute ________________________________________________________________________________________
 USE NWTraders
 GO
-CREATE USER b1tn3r FOR LOGIN b1tn3r
+CREATE USER myAdmin FOR LOGIN myAdmin
 	WITH DEFAULT_SCHEMA = db_accessadmin;
 GO
 CREATE USER cAllens FOR LOGIN cAllens

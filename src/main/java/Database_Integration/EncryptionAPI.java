@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** This is used to encrypt and decrypt any sensitive variables with a Password, database info, etc
- * It uses a Singleton design pattern to use as a static object between all classes
  */
 
 public class EncryptionAPI {
@@ -173,8 +172,8 @@ public class EncryptionAPI {
         String s = filterString(maliciousInput);
         //System.out.println(filterString("<script>"));       // this will throw an exception
         System.out.println(s);
-        System.out.println(filterPasswords("Jackpot1%"));
-        System.out.println(filterSearch("Micheal2 Bitner3"));
+        System.out.println(filterPasswords("Password%"));
+        System.out.println(filterSearch("John Jacob"));
         System.out.println(filterInput("Some input#383"));
         System.out.println(filterFile("image.jpeg"));
     }

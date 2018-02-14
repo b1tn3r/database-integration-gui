@@ -102,7 +102,7 @@ public class LoginController implements Initializable {
                 comboBox.getItems().add(user.getUsername());         // the list of users is cycled through and their usernames are added to the ComboBox
             }
 
-            String currentUser = "b1tn3r";
+            String currentUser = "myAdmin";
             comboBox.setValue(currentUser);
         } catch (SQLException e) {
             e.printStackTrace();

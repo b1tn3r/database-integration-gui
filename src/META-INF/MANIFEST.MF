@@ -1,7 +1,7 @@
 Main-Class: Database_Integration.Main
 Class-Path: sqljdbc42.jar
-Created-By: Apache Maven ${maven.version}
-Built-By: ${user.name}
+Created-By: ${user.name}
+Built-By:  Apache Maven ${maven.version}
 Build-Jdk: ${java.version}
 Name: Database_Integration/
 Specification-Title: "NWTraders Database Interface"
